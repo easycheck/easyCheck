@@ -2,6 +2,7 @@ package com.example.easycheck;
 
 import java.util.List;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -19,10 +20,16 @@ import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 */
 
-public class PlacesMapActivity{ //extends MapActivity {
-	// Nearest places
+public class PlacesMapActivity extends android.support.v4.app.FragmentActivity{ //extends MapActivity {
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_map);
+	}
+/*	// Nearest places
 	PlacesList nearPlaces;
-/*
+
 	// Map view
 	MapView mapView;
 

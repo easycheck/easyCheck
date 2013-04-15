@@ -1,6 +1,7 @@
 package com.example.easycheck;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -18,8 +19,7 @@ import android.widget.TextView;
 public class LoginActivity extends Activity {
 
 	public static final String PREFS_NAME = "EasyCheckPrefs";
-	public static final String PREF_USERNAME = "username";
-	public static final String PREF_PASSWORD = "password";
+	public static final String PREF_USER = "username";
 
 	/**
 	 * A dummy authentication store containing known user names and passwords.
@@ -48,10 +48,6 @@ public class LoginActivity extends Activity {
 	private View mLoginFormView;
 	private View mLoginStatusView;
 	private TextView mLoginStatusMessageView;
-
-	public LoginActivity() {
-
-	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +85,13 @@ public class LoginActivity extends Activity {
 						attemptLogin();
 					}
 				});
+	}
+
+	@Override
+	public void onBackPressed() {
+		super.finish();
+		this.finish();
+		
 	}
 
 	@Override
@@ -209,8 +212,7 @@ public class LoginActivity extends Activity {
 					 if (pieces[1].equals(mPassword)){
 						 getSharedPreferences(PREFS_NAME,MODE_PRIVATE)
 					        .edit()
-					        .putString(PREF_USERNAME, mEmail)
-					        .putString(PREF_PASSWORD, mPassword)
+					        .putString(PREF_USER, mEmail)
 					        .commit();
 						 return true;
 					} else return false;

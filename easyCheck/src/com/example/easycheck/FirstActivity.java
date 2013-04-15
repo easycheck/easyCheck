@@ -10,7 +10,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.example.easycheck.utils.AlertDialogManager;
 import com.example.easycheck.utils.ConnectionDetector;
@@ -19,18 +18,13 @@ public class FirstActivity extends Activity {
 
 	// flag for Internet connection status
 	Boolean isInternetPresent = false;
-
 	// Connection detector class
 	ConnectionDetector cd;
-
 	// Alert Dialog Manager
 	AlertDialogManager alert = new AlertDialogManager();
-
 	// Button
 	Button btnCheck;
-	
 	String usuario;
-
 	boolean apis[] = new boolean[3];
 	String fondo = null, nombre = null;
 	int color;
@@ -49,12 +43,7 @@ public class FirstActivity extends Activity {
 			alert.showAlertDialog(FirstActivity.this,
 					"Internet Connection Error",
 					"Please connect to working Internet connection", false);
-			Toast.makeText(FirstActivity.this, "No hay internet",
-					Toast.LENGTH_LONG).show();
 			return;
-		} else {
-			Toast.makeText(FirstActivity.this, "SI hay internet",
-					Toast.LENGTH_LONG).show();
 		}
 
 		/** button check **/
@@ -85,12 +74,6 @@ public class FirstActivity extends Activity {
 		return super.onCreateOptionsMenu(menu);
 	}
 
-	/**
-	 * @Override public boolean onCreateOptionsMenu(Menu menu) {
-	 *           getMenuInflater().inflate(R.menu.activity_main, menu); return
-	 *           true; }
-	 */
-
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -105,9 +88,9 @@ public class FirstActivity extends Activity {
 		case 2:
 			getSharedPreferences(LoginActivity.PREFS_NAME,MODE_PRIVATE)
 	        .edit()
-	        .putString(LoginActivity.PREF_USERNAME, null)
-	        .putString(LoginActivity.PREF_PASSWORD, null)
+	        .putString(LoginActivity.PREF_USER, null)
 	        .commit();
+			onResume();
 			return true;
 		}
 		return false;
@@ -118,15 +101,13 @@ public class FirstActivity extends Activity {
 		super.onResume();
 
 		SharedPreferences pref = getSharedPreferences(LoginActivity.PREFS_NAME,MODE_PRIVATE);   
-		String username = pref.getString(LoginActivity.PREF_USERNAME, null);
-		String password = pref.getString(LoginActivity.PREF_PASSWORD, null);
+		String username = pref.getString(LoginActivity.PREF_USER, null);
 
-		if (username == null || password == null) {
+		if (username == null) {
 			Intent i = new Intent(getApplicationContext(),
 					LoginActivity.class);
 			startActivity(i);
 		}
-		
 		
 		SharedPreferences sharedPrefs = PreferenceManager
 				.getDefaultSharedPreferences(this);
