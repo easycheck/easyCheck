@@ -40,9 +40,6 @@ public class FirstActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_first);
 		
-		
-		apis[0] = getIntent().getExtras().getBoolean("google");
-		
 
 		cd = new ConnectionDetector(getApplicationContext());
 
