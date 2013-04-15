@@ -1,0 +1,15 @@
+<resources>
+
+    <string name="app_name">easyCheck</string>
+    <string name="menu_settings">Opciones</string>
+    <string name="menu_logOut">Salir</string>
+    <string name="menu_estats">Ver Estadísticas</string>
+    <string name="title_activity_first">EasyCheck</string>
+    <string name="title_activity_main">Selecciona un Negocio</string>
+    <string name="title_activity_single_place">Datos del Negocio</string>
+    <string name="title_activity_places_map">Mapa de Negocios</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+    
+
+</resources>

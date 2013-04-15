@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+     
+     <PreferenceCategory android:title="Origen de los datos">
+        <CheckBoxPreference
+            android:key="Google"
+            android:defaultValue="true"
+            android:title="Google Places"
+            android:summary="Buscar a través de la API de Google"
+    		/>
+         <CheckBoxPreference
+            android:key="Foursquare"
+            android:title="Foursquare"
+            android:summary="Buscar a través de la API de Foursquare"
+    		/>
+          <CheckBoxPreference
+            android:key="Yelp"
+            android:title="Yelp"
+            android:summary="Buscar a través de la API de Yelp"
+    		/>
+        
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Estilo">
+        
+        <ListPreference
+            android:key="Fondo"
+            android:title="Color de fondo"
+            android:summary="Selecciona el color para el fondo de pantalla"
+            android:dialogTitle="Selecciona un color"
+            android:entries="@array/Colores"
+            android:entryValues="@array/Colores"
+            />
+        
+        <EditTextPreference 
+            android:key="Nombre"
+            android:title="Nombre del usuario"
+            android:summary="Escribe tu nombre. Esto es opcional"
+            android:dialogTitle="Escribe el nombre"
+         	/>
+        
+    </PreferenceCategory>
+
+</PreferenceScreen>
