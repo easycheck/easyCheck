@@ -40,7 +40,6 @@ public class FirstActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_first);
 		
-
 		cd = new ConnectionDetector(getApplicationContext());
 
 		// Check if Internet present
@@ -104,7 +103,11 @@ public class FirstActivity extends Activity {
 			return true;
 
 		case 2:
-			startActivity(new Intent(this, LoginActivity.class));
+			getSharedPreferences(LoginActivity.PREFS_NAME,MODE_PRIVATE)
+	        .edit()
+	        .putString(LoginActivity.PREF_USERNAME, null)
+	        .putString(LoginActivity.PREF_PASSWORD, null)
+	        .commit();
 			return true;
 		}
 		return false;
@@ -114,6 +117,17 @@ public class FirstActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 
+		SharedPreferences pref = getSharedPreferences(LoginActivity.PREFS_NAME,MODE_PRIVATE);   
+		String username = pref.getString(LoginActivity.PREF_USERNAME, null);
+		String password = pref.getString(LoginActivity.PREF_PASSWORD, null);
+
+		if (username == null || password == null) {
+			Intent i = new Intent(getApplicationContext(),
+					LoginActivity.class);
+			startActivity(i);
+		}
+		
+		
 		SharedPreferences sharedPrefs = PreferenceManager
 				.getDefaultSharedPreferences(this);
 
