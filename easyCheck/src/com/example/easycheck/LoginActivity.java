@@ -214,6 +214,9 @@ public class LoginActivity extends Activity {
 					        .edit()
 					        .putString(PREF_USER, mEmail)
 					        .commit();
+						 Intent i = new Intent(getApplicationContext(),
+									FirstActivity.class);
+							startActivity(i);
 						 return true;
 					} else return false;
 				}

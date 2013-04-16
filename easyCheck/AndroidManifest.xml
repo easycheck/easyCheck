@@ -80,6 +80,14 @@
             android:label="@string/title_activity_login"
             android:windowSoftInputMode="adjustResize|stateVisible" >
         </activity>
+        <activity
+            android:name="com.example.easycheck.StatsActivity"
+            android:label="@string/title_activity_stats"
+            android:parentActivityName="com.example.easycheck.FirstActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.easycheck.FirstActivity" />
+        </activity>
     </application>
 
 </manifest>

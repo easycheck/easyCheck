@@ -78,7 +78,7 @@ public class FirstActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case 0:
-			startActivity(new Intent(this, SettingsActivity.class));
+			startActivity(new Intent(this, StatsActivity.class));
 			return true;
 
 		case 1:
@@ -106,6 +106,7 @@ public class FirstActivity extends Activity {
 		if (username == null) {
 			Intent i = new Intent(getApplicationContext(),
 					LoginActivity.class);
+			this.finish();
 			startActivity(i);
 		}
 		
