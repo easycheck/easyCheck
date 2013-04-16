@@ -2,8 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:padding="10dip">
+    android:padding="10dip" >
  
     <!-- Name Label -->
     <TextView
@@ -49,5 +50,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dip"
         android:layout_marginBottom="5dip"/>
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_adelante" />
  
 </LinearLayout>

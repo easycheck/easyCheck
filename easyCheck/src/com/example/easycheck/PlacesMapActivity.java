@@ -47,7 +47,7 @@ public class PlacesMapActivity extends android.support.v4.app.FragmentActivity {
 		
 		mapa.moveCamera(camUpd1);
 		
-		camUpd1 = CameraUpdateFactory.zoomTo(12);
+		camUpd1 = CameraUpdateFactory.zoomTo(15);
 		mapa.moveCamera(camUpd1);
 		
 		for (Place place : nearPlaces.results) {
@@ -61,7 +61,7 @@ public class PlacesMapActivity extends android.support.v4.app.FragmentActivity {
 		        .snippet("Direccion: "+place.vicinity));
 			  }
 		
-		mapa.setOnMarkerClickListener(new OnMarkerClickListener() {
+		/* mapa.setOnMarkerClickListener(new OnMarkerClickListener() {
 		    public boolean onMarkerClick(Marker marker) {
 		        Toast.makeText(
 		            PlacesMapActivity.this,
@@ -72,5 +72,6 @@ public class PlacesMapActivity extends android.support.v4.app.FragmentActivity {
 		        return false;
 		    }
 		});
+		*/
 	}
 }
