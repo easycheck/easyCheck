@@ -24,7 +24,7 @@ public class FirstActivity extends Activity {
 	AlertDialogManager alert = new AlertDialogManager();
 	// Button
 	Button btnCheck;
-	String usuario;
+	
 	boolean apis[] = new boolean[3];
 	String fondo = null, nombre = null;
 	int color;
@@ -59,7 +59,6 @@ public class FirstActivity extends Activity {
 				i.putExtra("google", apis[0]);
 				i.putExtra("foursquare", apis[1]);
 				i.putExtra("yelp", apis[2]);
-				i.putExtra("nombre", nombre);
 				i.putExtra("fondo", color);
 				startActivity(i);
 			}
@@ -116,7 +115,6 @@ public class FirstActivity extends Activity {
 		apis[0] = sharedPrefs.getBoolean("Google", false);
 		apis[1] = sharedPrefs.getBoolean("Foursquare", false);
 		apis[2] = sharedPrefs.getBoolean("Yelp", false);
-		nombre = sharedPrefs.getString("Nombre", "Usuario");
 		fondo = sharedPrefs.getString("Fondo", "negro");
 
 		if (fondo.equalsIgnoreCase("azul")) {

@@ -56,7 +56,6 @@ public class MainActivity extends Activity {
     public static String KEY_NAME = "name"; // name of the place
     public static String KEY_VICINITY = "vicinity"; // Place area name
     
-    String nombre;
     int fondo;
     boolean apis[] = new boolean[3];
     
@@ -71,7 +70,6 @@ public class MainActivity extends Activity {
         apis[0] = getIntent().getExtras().getBoolean("google");
         apis[1] = getIntent().getExtras().getBoolean("foursquare");
         apis[2] = getIntent().getExtras().getBoolean("yelp");
-        nombre = getIntent().getExtras().getString("nombre");
         
         // creating GPS Class object
         gps = new GPSTracker(this);
