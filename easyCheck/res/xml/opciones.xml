@@ -32,13 +32,6 @@
             android:entryValues="@array/Colores"
             />
         
-        <EditTextPreference 
-            android:key="Nombre"
-            android:title="Nombre del usuario"
-            android:summary="Escribe tu nombre. Esto es opcional"
-            android:dialogTitle="Escribe el nombre"
-         	/>
-        
     </PreferenceCategory>
 
 </PreferenceScreen>

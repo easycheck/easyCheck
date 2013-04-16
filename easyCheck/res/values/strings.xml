@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <string name="app_name">easyCheck</string>
@@ -10,6 +11,7 @@
     <string name="title_activity_places_map">Mapa de Negocios</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_settings">SettingsActivity</string>
-    
+    <string name="title_activity_stats">Estadísticas</string>
+    <string name="action_settings">Settings</string>
 
 </resources>
