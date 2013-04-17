@@ -48,7 +48,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
+
         <!-- LoginActivity -->
         <activity
             android:name="com.example.easycheck.LoginActivity"
@@ -79,11 +79,15 @@
             android:name="com.example.easycheck.SettingsActivity"
             android:label="@string/title_activity_settings" >
         </activity>
-        
+
         <!-- StatsActivity -->
         <activity
             android:name="com.example.easycheck.StatsActivity"
             android:label="@string/title_activity_stats" >
+        </activity>
+        <activity
+            android:name="com.example.easycheck.DatosCheckActivity"
+            android:label="@string/title_activity_datos_check" >
         </activity>
     </application>
 

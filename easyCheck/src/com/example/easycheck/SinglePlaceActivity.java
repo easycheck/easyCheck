@@ -7,6 +7,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.easycheck.bean.PlaceDetails;
@@ -33,6 +35,9 @@ public class SinglePlaceActivity extends Activity {
 	// Progress dialog
 	ProgressDialog pDialog;
 
+	// Button
+	Button btnSeguir;
+
 	// KEY Strings
 	public static String KEY_REFERENCE = "reference"; // id of the place
 
@@ -45,10 +50,25 @@ public class SinglePlaceActivity extends Activity {
 		Intent i = getIntent();
 
 		// Place referece id
-		String reference = i.getStringExtra(KEY_REFERENCE);
+		final String reference = i.getStringExtra(KEY_REFERENCE);
 
 		// Calling a Async Background thread
 		new LoadSinglePlaceDetails().execute(reference);
+
+		/** button seguir **/
+		btnSeguir = (Button) findViewById(R.id.button1);
+
+		/** Button seguir click event for continue with this business */
+		btnSeguir.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				Intent i = new Intent(getApplicationContext(),
+						DatosCheckActivity.class);
+				i.putExtra("reference", reference);
+				startActivity(i);
+			}
+		});
 	}
 
 	/**
