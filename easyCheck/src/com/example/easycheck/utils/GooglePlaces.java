@@ -57,7 +57,7 @@ public class GooglePlaces {
             request.getUrl().put("key", API_KEY);
             request.getUrl().put("location", _latitude + "," + _longitude);
             request.getUrl().put("radius", _radius); // in meters
-            request.getUrl().put("sensor", "false");
+            request.getUrl().put("sensor", "true");
             if(types != null)
                 request.getUrl().put("types", types);
  

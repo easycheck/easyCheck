@@ -31,8 +31,8 @@ public class PlacesMapActivity extends android.support.v4.app.FragmentActivity {
 		Intent i = getIntent();
 
 		// Users current geo location
-		String user_latitude = i.getExtras().getString("user_latitude");
-		String user_longitude = i.getExtras().getString("user_longitude");
+		double user_latitude = i.getExtras().getDouble("user_latitude");
+		double user_longitude = i.getExtras().getDouble("user_longitude");
 
 		// Near places list
 		nearPlaces = (PlacesList) i.getSerializableExtra("near_places");
@@ -45,8 +45,8 @@ public class PlacesMapActivity extends android.support.v4.app.FragmentActivity {
 
 		mapa.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
-		LatLng ll = new LatLng(Double.parseDouble(user_latitude),
-				Double.parseDouble(user_longitude));
+		LatLng ll = new LatLng(user_latitude,
+				user_longitude);
 		CameraUpdate camUpd1 = CameraUpdateFactory.newLatLng(ll);
 
 		mapa.moveCamera(camUpd1);
