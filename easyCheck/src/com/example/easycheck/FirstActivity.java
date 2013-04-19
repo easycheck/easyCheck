@@ -24,6 +24,7 @@ public class FirstActivity extends Activity {
 	AlertDialogManager alert = new AlertDialogManager();
 	// Button
 	Button btnCheck;
+	Button btnJornada;
 	
 	boolean apis[] = new boolean[3];
 	String fondo = null, nombre = null;
@@ -60,6 +61,20 @@ public class FirstActivity extends Activity {
 				i.putExtra("foursquare", apis[1]);
 				i.putExtra("yelp", apis[2]);
 				i.putExtra("fondo", color);
+				startActivity(i);
+			}
+		});
+		
+		/** button check **/
+		btnJornada = (Button) findViewById(R.id.button2);
+
+		/** Button check click event for showing the business around you */
+		btnJornada.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				Intent i = new Intent(getApplicationContext(),
+						JornadaActivity.class);
 				startActivity(i);
 			}
 		});

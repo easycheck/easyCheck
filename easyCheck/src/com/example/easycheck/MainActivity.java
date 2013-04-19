@@ -143,6 +143,9 @@ public class MainActivity extends Activity {
 				// getting values from selected ListItem
 				String reference = ((TextView) view
 						.findViewById(R.id.reference)).getText().toString();
+				
+				String name = ((TextView) view
+						.findViewById(R.id.name)).getText().toString();
 
 				// Starting new intent
 				Intent in = new Intent(getApplicationContext(),
@@ -151,6 +154,7 @@ public class MainActivity extends Activity {
 				// Sending place refrence id to single place activity
 				// place refrence id used to get "Place full details"
 				in.putExtra(KEY_REFERENCE, reference);
+				in.putExtra(KEY_NAME, name);
 				startActivity(in);
 			}
 		});

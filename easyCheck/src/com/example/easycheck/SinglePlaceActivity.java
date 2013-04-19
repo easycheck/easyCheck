@@ -40,7 +40,7 @@ public class SinglePlaceActivity extends Activity {
 
 	// KEY Strings
 	public static String KEY_REFERENCE = "reference"; // id of the place
-
+	public static String KEY_NAME = "name";
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -51,6 +51,7 @@ public class SinglePlaceActivity extends Activity {
 
 		// Place referece id
 		final String reference = i.getStringExtra(KEY_REFERENCE);
+		final String name = i.getStringExtra(KEY_NAME);
 
 		// Calling a Async Background thread
 		new LoadSinglePlaceDetails().execute(reference);
@@ -65,7 +66,8 @@ public class SinglePlaceActivity extends Activity {
 			public void onClick(View arg0) {
 				Intent i = new Intent(getApplicationContext(),
 						DatosCheckActivity.class);
-				i.putExtra("reference", reference);
+				i.putExtra(KEY_REFERENCE, reference);
+				i.putExtra(KEY_NAME, name);
 				startActivity(i);
 			}
 		});

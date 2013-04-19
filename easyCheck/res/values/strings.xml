@@ -18,7 +18,8 @@
     <string name="spin_estado">Visita de:</string>
     <string name="spin_contacto">Contactos:</string>
     <string name="btn_adelante">Seguir</string>
-    
     <string name="action_settings">Settings</string>
+    <string name="title_activity_jornada">JornadaActivity</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>

@@ -89,6 +89,10 @@
             android:name="com.example.easycheck.DatosCheckActivity"
             android:label="@string/title_activity_datos_check" >
         </activity>
+        <activity
+            android:name="com.example.easycheck.JornadaActivity"
+            android:label="@string/title_activity_jornada" >
+        </activity>
     </application>
 
 </manifest>
