@@ -57,7 +57,7 @@ public class JornadaActivity extends Activity {
 	@Override
 	public void onPause() {
 
-		Log.d("HUGO ranking item 1", rankingItems.get(1).toString());
+		//Log.d("HUGO ranking item 1", rankingItems.get(1).toString());
 		super.onPause();
 	}
 

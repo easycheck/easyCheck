@@ -63,7 +63,7 @@ public class PlacesMapActivity extends android.support.v4.app.FragmentActivity {
 			MarkerOptions m = new MarkerOptions()
 					.position(new LatLng(latitude, longitude))
 					.title(place.name)
-					.snippet(place.vicinity + " -- " + place.reference);
+					.snippet(place.vicinity);
 
 			// Map item
 			Marker marker = mapa.addMarker(m);

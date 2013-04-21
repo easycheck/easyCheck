@@ -191,7 +191,7 @@ public class MainActivity extends Activity {
 				// If you want all types places make it as null
 				// Check list of types supported by google
 				//
-				String types = "cafe|restaurant"; // Listing places only cafes,
+				//String types = "cafe|restaurant"; // Listing places only cafes,
 													// restaurants
 
 				// Radius in meters - increase this value if you don't find any
@@ -201,7 +201,7 @@ public class MainActivity extends Activity {
 				Log.d("AAAAAAAAAAAAAAA", lat + "-lat & long-" + lon);
 
 				// get nearest places
-				nearPlaces = googlePlaces.search(lat, lon, radius, types);
+				nearPlaces = googlePlaces.search(lat, lon, radius, null);
 
 			} catch (Exception e) {
 				e.printStackTrace();
