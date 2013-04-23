@@ -7,12 +7,12 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
@@ -23,7 +23,6 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.easycheck.bean.Place;
 import com.example.easycheck.bean.PlacesList;
@@ -33,29 +32,16 @@ import com.example.easycheck.utils.GooglePlaces;
 public class MainActivity extends Activity {
 
 	private LocationManager locationManager;
-	private String provider;
 
-	private double lon = 0, lat;
+	private static double lon = 0, lat;
 
-	// Alert Dialog Manager
+
 	AlertDialogManager alert = new AlertDialogManager();
-
-	// Google Places
 	GooglePlaces googlePlaces;
-
-	// Places List
 	PlacesList nearPlaces;
-
-	// Button
 	Button btnShowOnMap;
-
-	// Progress dialog
 	ProgressDialog pDialog;
-
-	// Places Listview
 	ListView lv;
-
-	// ListItems data
 	ArrayList<HashMap<String, String>> placesListItems = new ArrayList<HashMap<String, String>>();
 
 	// KEY Strings
@@ -66,9 +52,28 @@ public class MainActivity extends Activity {
 	int fondo;
 	boolean apis[] = new boolean[3];
 
+	MyLocationListener listener;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		listener = new MyLocationListener();
+		
+		// Get the location manager
+		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		
+		 final boolean gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+
+		    if (!gpsEnabled) {
+		        // Build an alert dialog here that requests that the user enable
+		        // the location services, then when the user clicks the "OK" button,
+		        // call enableLocationSettings()
+		    }
+		
+		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, listener);
+		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, listener);
+
 		setContentView(R.layout.activity_main);
 
 		// get the variables passed by the previous activity.
@@ -76,41 +81,20 @@ public class MainActivity extends Activity {
 		apis[0] = getIntent().getExtras().getBoolean("google");
 		apis[1] = getIntent().getExtras().getBoolean("foursquare");
 		apis[2] = getIntent().getExtras().getBoolean("yelp");
-
-		// Get the location manager
-		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		// Define the criteria how to select the locatioin provider -> use
-		// default
-		Criteria criteria = new Criteria();
-		//criteria.setAccuracy(Criteria.ACCURACY_FINE);
-		provider = locationManager.getBestProvider(criteria, true);
-		locationManager.requestLocationUpdates(provider, 10, 100, listener);
-		Location loc = locationManager.getLastKnownLocation(provider);
-
-		// Initialize the location fields
-		if (loc != null) {
-			lat = loc.getLatitude();
-			lon = loc.getLongitude();
-			Log.d("Provider selected:", provider);
-			Log.d("Your Location", "latitude:" + loc.getLatitude()
-					+ ", longitude: " + loc.getLongitude());
+		
+		if (lon == 0) {
+			Log.d("ERROR Location", "NOT LOADED");
 		} else {
-			Log.d("Provider selected:", "ERROOR");
-			Toast toast = Toast.makeText(getApplicationContext(),
-					"No GPS position detected", Toast.LENGTH_SHORT);
-			toast.show();
+			Log.d("Your Location", "latitude:" + lat
+					+ ", longitude: " + lon);
 		}
-
+		
 		// Getting listview
 		lv = (ListView) findViewById(R.id.list);
 
 		// button show on map
 		btnShowOnMap = (Button) findViewById(R.id.btn_show_map);
-
-		// calling background Async task to load Google Places
-		// After getting places from Google all the data is shown in listview
-		new LoadPlaces().execute();
-
+		
 		/** Button click event for shown on map */
 		btnShowOnMap.setOnClickListener(new View.OnClickListener() {
 
@@ -130,6 +114,10 @@ public class MainActivity extends Activity {
 				startActivity(i);
 			}
 		});
+
+		// calling background Async task to load Google Places
+		// After getting places from Google all the data is shown in listview
+		new LoadPlaces().execute();
 
 		/**
 		 * ListItem click event On selecting a listitem SinglePlaceActivity is
@@ -160,6 +148,19 @@ public class MainActivity extends Activity {
 		});
 	}
 
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		// Remove the listener you previously added
+		locationManager.removeUpdates(listener);
+	}
+	
+	private void enableLocationSettings() {
+	    Intent settingsIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+	    startActivity(settingsIntent);
+	}
+
 	/**
 	 * Background Async Task to Load Google places
 	 * */
@@ -171,7 +172,9 @@ public class MainActivity extends Activity {
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
+			lon=0;
 			pDialog = new ProgressDialog(MainActivity.this);
+
 			pDialog.setMessage(Html
 					.fromHtml("<b>Busqueda</b><br/>Cargando Negocios..."));
 			pDialog.setIndeterminate(false);
@@ -183,6 +186,7 @@ public class MainActivity extends Activity {
 		 * getting Places JSON
 		 * */
 		protected String doInBackground(String... args) {
+			
 			// creating Places class object
 			googlePlaces = new GooglePlaces();
 
@@ -191,13 +195,16 @@ public class MainActivity extends Activity {
 				// If you want all types places make it as null
 				// Check list of types supported by google
 				//
-				//String types = "cafe|restaurant"; // Listing places only cafes,
-													// restaurants
+				//String types = "cafe|restaurant"; // Listing places only cafes, restaurants
 
-				// Radius in meters - increase this value if you don't find any
-				// places
+				// Radius in meters - increase this value if you don't find any places
 				double radius = 1000; // 1000 meters
 
+				Log.d("AAAAAAAAAAAAAAA", lat + "-lat & long-" + lon);
+				
+				while (lon == 0){
+				};
+				
 				Log.d("AAAAAAAAAAAAAAA", lat + "-lat & long-" + lon);
 
 				// get nearest places
@@ -293,7 +300,7 @@ public class MainActivity extends Activity {
 
 	}
 
-	private final LocationListener listener = new LocationListener() {
+	private class MyLocationListener implements LocationListener {
 		@Override
 		public void onLocationChanged(Location location) {
 			lon = location.getLongitude();

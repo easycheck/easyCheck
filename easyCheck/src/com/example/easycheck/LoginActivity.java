@@ -1,12 +1,17 @@
 package com.example.easycheck;
 
+import com.example.easycheck.utils.AlertDialogManager;
+import com.example.easycheck.utils.ConnectionDetector;
+
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.view.KeyEvent;
-import android.view.Menu;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
@@ -22,16 +27,10 @@ public class LoginActivity extends Activity {
 	public static final String PREF_USER = "username";
 
 	/**
-	 * A dummy authentication store containing known user names and passwords.
-	 * TODO: remove after connecting to a real authentication system.
+	 * EXAMPLE CREDENTIALS
 	 */
 	private static final String[] DUMMY_CREDENTIALS = new String[] {
-			"hugo@example.com:pass", "moli@example.com:moli" };
-
-	/**
-	 * The default email to populate the email field with.
-	 */
-	public static final String EXTRA_EMAIL = "com.example.android.authenticatordemo.extra.EMAIL";
+			"hugo:pass", "moli:moli" };
 
 	/**
 	 * Keep track of the login task to ensure we can cancel it if requested.
@@ -45,18 +44,41 @@ public class LoginActivity extends Activity {
 	// UI references.
 	private EditText mEmailView;
 	private EditText mPasswordView;
-	private View mLoginFormView;
-	private View mLoginStatusView;
 	private TextView mLoginStatusMessageView;
+	// private View mLoginFormView;
+	// private View mLoginStatusView;
+
+	private int ecolor = Color.RED; // color for the error font
+	private ForegroundColorSpan fgcspan = new ForegroundColorSpan(ecolor);
+	private SpannableStringBuilder ssbuilder;
+	private String estring;
+
+	private ConnectionDetector cd;
+	boolean isInternetPresent;
+	private AlertDialogManager alert;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_login);
-		
+
+		cd = new ConnectionDetector(getApplicationContext());
+
+		// Check if Internet present
+		isInternetPresent = cd.isConnectingToInternet();
+		if (!isInternetPresent) {
+			// Internet Connection is not present
+			alert.showAlertDialog(
+					LoginActivity.this,
+					"Error de conectividad",
+					"Por favor, revise su conexión de datos y vuelva a intentarlo",
+					false);
+			findViewById(R.id.sign_in_button).setEnabled(false);
+			return;
+		}
+
 		// Set up the login form.
-		mEmail = getIntent().getStringExtra(EXTRA_EMAIL);
 		mEmailView = (EditText) findViewById(R.id.email);
 		mEmailView.setText(mEmail);
 
@@ -74,8 +96,8 @@ public class LoginActivity extends Activity {
 					}
 				});
 
-		mLoginFormView = findViewById(R.id.login_form);
-		mLoginStatusView = findViewById(R.id.login_status);
+		// mLoginFormView = findViewById(R.id.login_form);
+		// mLoginStatusView = findViewById(R.id.login_status);
 		mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
 
 		findViewById(R.id.sign_in_button).setOnClickListener(
@@ -91,14 +113,7 @@ public class LoginActivity extends Activity {
 	public void onBackPressed() {
 		super.finish();
 		this.finish();
-		
-	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		super.onCreateOptionsMenu(menu);
-		getMenuInflater().inflate(R.menu.login, menu);
-		return true;
 	}
 
 	/**
@@ -124,22 +139,39 @@ public class LoginActivity extends Activity {
 
 		// Check for a valid password.
 		if (TextUtils.isEmpty(mPassword)) {
-			mPasswordView.setError(getString(R.string.error_field_required));
+			estring = getString(R.string.error_field_required);
+			ssbuilder = new SpannableStringBuilder(estring);
+			ssbuilder.setSpan(fgcspan, 0, estring.length(), 0);
+
+			mPasswordView.setError(ssbuilder);
 			focusView = mPasswordView;
 			cancel = true;
 		} else if (mPassword.length() < 4) {
-			mPasswordView.setError(getString(R.string.error_invalid_password));
+			estring = getString(R.string.error_invalid_password);
+			ssbuilder = new SpannableStringBuilder(estring);
+			ssbuilder.setSpan(fgcspan, 0, estring.length(), 0);
+
+			mPasswordView.setError(ssbuilder);
 			focusView = mPasswordView;
 			cancel = true;
 		}
 
 		// Check for a valid email address.
 		if (TextUtils.isEmpty(mEmail)) {
-			mEmailView.setError(getString(R.string.error_field_required));
+			estring = getString(R.string.error_field_required);
+			ssbuilder = new SpannableStringBuilder(estring);
+			ssbuilder.setSpan(fgcspan, 0, estring.length(), 0);
+
+			mEmailView.setError(ssbuilder);
 			focusView = mEmailView;
 			cancel = true;
-		} else if (!mEmail.contains("@")) {
-			mEmailView.setError(getString(R.string.error_invalid_email));
+		} else if (mEmail.length() < 4) {
+			estring = getString(R.string.error_invalid_email);
+			fgcspan = new ForegroundColorSpan(ecolor);
+			ssbuilder = new SpannableStringBuilder(estring);
+			ssbuilder.setSpan(fgcspan, 0, estring.length(), 0);
+
+			mEmailView.setError(ssbuilder);
 			focusView = mEmailView;
 			cancel = true;
 		}
@@ -209,17 +241,17 @@ public class LoginActivity extends Activity {
 				String[] pieces = credential.split(":");
 				if (pieces[0].equals(mEmail)) {
 					// Account exists, return true if the password matches.
-					 if (pieces[1].equals(mPassword)){
-						 getSharedPreferences(PREFS_NAME,MODE_PRIVATE)
-					        .edit()
-					        .putString(PREF_USER, mEmail)
-					        .commit();
-						 Intent i = new Intent(getApplicationContext(),
-									FirstActivity.class);
-							startActivity(i);
-						 return true;
-					} else return false;
-				}
+					if (pieces[1].equals(mPassword)) {
+						getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit()
+								.putString(PREF_USER, mEmail).commit();
+						Intent i = new Intent(getApplicationContext(),
+								FirstActivity.class);
+						startActivity(i);
+						return true;
+					} else
+						return false;
+				} else
+					return false;
 			}
 
 			// TODO: register the new account here.
@@ -234,8 +266,12 @@ public class LoginActivity extends Activity {
 			if (success) {
 				finish();
 			} else {
-				mPasswordView
-						.setError(getString(R.string.error_incorrect_password));
+
+				estring = getString(R.string.error_incorrect_password);
+				ssbuilder = new SpannableStringBuilder(estring);
+				ssbuilder.setSpan(fgcspan, 0, estring.length(), 0);
+
+				mPasswordView.setError(ssbuilder);
 				mPasswordView.requestFocus();
 			}
 		}

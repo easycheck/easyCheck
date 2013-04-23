@@ -35,6 +35,9 @@ public class FirstActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_first);
 		
+		/** button check **/
+		btnCheck = (Button) findViewById(R.id.button1);
+		
 		cd = new ConnectionDetector(getApplicationContext());
 
 		// Check if Internet present
@@ -42,13 +45,11 @@ public class FirstActivity extends Activity {
 		if (!isInternetPresent) {
 			// Internet Connection is not present
 			alert.showAlertDialog(FirstActivity.this,
-					"Internet Connection Error",
-					"Please connect to working Internet connection", false);
+					"Error de conectividad",
+					"Por favor, revise su conexión de datos y vuelva a intentarlo", false);
+			btnCheck.setEnabled(false);
 			return;
 		}
-
-		/** button check **/
-		btnCheck = (Button) findViewById(R.id.button1);
 
 		/** Button check click event for showing the business around you */
 		btnCheck.setOnClickListener(new View.OnClickListener() {

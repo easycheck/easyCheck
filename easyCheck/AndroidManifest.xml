@@ -12,13 +12,11 @@
         android:glEsVersion="0x00020000"
         android:required="true" />
 
-    <!-- Internet Permissions -->
+    <!-- Permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
-
-    <!-- Network State Permissions -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
-    <!-- Maps metadata and permissions -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    
     <permission
         android:name="com.example.easycheck.permission.MAPS_RECEIVE"
         android:protectionLevel="signature" />
@@ -26,9 +24,6 @@
     <uses-permission android:name="com.example.easycheck.permission.MAPS_RECEIVE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
-
-    <!-- Access Location -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:icon="@drawable/ic_launcher"
@@ -85,10 +80,14 @@
             android:name="com.example.easycheck.StatsActivity"
             android:label="@string/title_activity_stats" >
         </activity>
+        
+        <!-- DatosCheckActivity -->
         <activity
             android:name="com.example.easycheck.DatosCheckActivity"
             android:label="@string/title_activity_datos_check" >
         </activity>
+        
+        <!-- JornadaActivity -->
         <activity
             android:name="com.example.easycheck.JornadaActivity"
             android:label="@string/title_activity_jornada" >
