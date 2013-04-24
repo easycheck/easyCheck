@@ -16,7 +16,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    
+
     <permission
         android:name="com.example.easycheck.permission.MAPS_RECEIVE"
         android:protectionLevel="signature" />
@@ -80,17 +80,21 @@
             android:name="com.example.easycheck.StatsActivity"
             android:label="@string/title_activity_stats" >
         </activity>
-        
+
         <!-- DatosCheckActivity -->
         <activity
             android:name="com.example.easycheck.DatosCheckActivity"
             android:label="@string/title_activity_datos_check" >
         </activity>
-        
+
         <!-- JornadaActivity -->
         <activity
             android:name="com.example.easycheck.JornadaActivity"
             android:label="@string/title_activity_jornada" >
+        </activity>
+        <activity
+            android:name="com.example.easycheck.NuevoContactoActivity"
+            android:label="@string/title_activity_nuevo_contacto" >
         </activity>
     </application>
 

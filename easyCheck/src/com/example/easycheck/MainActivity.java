@@ -35,7 +35,6 @@ public class MainActivity extends Activity {
 
 	private static double lon = 0, lat;
 
-
 	AlertDialogManager alert = new AlertDialogManager();
 	GooglePlaces googlePlaces;
 	PlacesList nearPlaces;
@@ -63,7 +62,7 @@ public class MainActivity extends Activity {
 		// Get the location manager
 		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		
-		 final boolean gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+		final boolean gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
 		    if (!gpsEnabled) {
 		        // Build an alert dialog here that requests that the user enable
@@ -114,9 +113,7 @@ public class MainActivity extends Activity {
 				startActivity(i);
 			}
 		});
-
-		// calling background Async task to load Google Places
-		// After getting places from Google all the data is shown in listview
+		
 		new LoadPlaces().execute();
 
 		/**
@@ -150,7 +147,6 @@ public class MainActivity extends Activity {
 
 	@Override
 	protected void onPause() {
-		// TODO Auto-generated method stub
 		super.onPause();
 		// Remove the listener you previously added
 		locationManager.removeUpdates(listener);
@@ -159,6 +155,13 @@ public class MainActivity extends Activity {
 	private void enableLocationSettings() {
 	    Intent settingsIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
 	    startActivity(settingsIntent);
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		// calling background Async task to load Google Places
+		// After getting places from Google all the data is shown in listview
 	}
 
 	/**
@@ -195,7 +198,7 @@ public class MainActivity extends Activity {
 				// If you want all types places make it as null
 				// Check list of types supported by google
 				//
-				//String types = "cafe|restaurant"; // Listing places only cafes, restaurants
+				// String types = "cafe|restaurant"; // Listing places only cafes, restaurants
 
 				// Radius in meters - increase this value if you don't find any places
 				double radius = 1000; // 1000 meters

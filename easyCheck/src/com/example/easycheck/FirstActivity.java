@@ -16,37 +16,38 @@ import com.example.easycheck.utils.ConnectionDetector;
 
 public class FirstActivity extends Activity {
 
-	// flag for Internet connection status
-	Boolean isInternetPresent = false;
-	// Connection detector class
-	ConnectionDetector cd;
-	// Alert Dialog Manager
-	AlertDialogManager alert = new AlertDialogManager();
-	// Button
-	Button btnCheck;
-	Button btnJornada;
-	
-	boolean apis[] = new boolean[3];
-	String fondo = null, nombre = null;
-	int color;
+	// variables for internet connection check
+	private Boolean isInternetPresent = false;
+	private ConnectionDetector cd;
+	private AlertDialogManager alert = new AlertDialogManager();
+
+	// view components
+	private Button btnCheck, btnJornada;
+
+	// settings
+	private boolean apis[] = new boolean[3];
+	private String fondo = null;
+	private int color;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_first);
-		
+
 		/** button check **/
 		btnCheck = (Button) findViewById(R.id.button1);
-		
+
 		cd = new ConnectionDetector(getApplicationContext());
 
 		// Check if Internet present
 		isInternetPresent = cd.isConnectingToInternet();
 		if (!isInternetPresent) {
 			// Internet Connection is not present
-			alert.showAlertDialog(FirstActivity.this,
+			alert.showAlertDialog(
+					FirstActivity.this,
 					"Error de conectividad",
-					"Por favor, revise su conexión de datos y vuelva a intentarlo", false);
+					"Por favor, revise su conexión de datos y vuelva a intentarlo",
+					false);
 			btnCheck.setEnabled(false);
 			return;
 		}
@@ -65,11 +66,11 @@ public class FirstActivity extends Activity {
 				startActivity(i);
 			}
 		});
-		
-		/** button check **/
+
+		/** button jornada **/
 		btnJornada = (Button) findViewById(R.id.button2);
 
-		/** Button check click event for showing the business around you */
+		/** para mostrar los checkins sin almacenar de la jornada actual */
 		btnJornada.setOnClickListener(new View.OnClickListener() {
 
 			@Override
@@ -101,10 +102,8 @@ public class FirstActivity extends Activity {
 			return true;
 
 		case 2:
-			getSharedPreferences(LoginActivity.PREFS_NAME,MODE_PRIVATE)
-	        .edit()
-	        .putString(LoginActivity.PREF_USER, null)
-	        .commit();
+			getSharedPreferences(LoginActivity.PREFS_NAME, MODE_PRIVATE).edit()
+					.putString(LoginActivity.PREF_USER, null).commit();
 			onResume();
 			return true;
 		}
@@ -115,16 +114,16 @@ public class FirstActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 
-		SharedPreferences pref = getSharedPreferences(LoginActivity.PREFS_NAME,MODE_PRIVATE);   
+		SharedPreferences pref = getSharedPreferences(LoginActivity.PREFS_NAME,
+				MODE_PRIVATE);
 		String username = pref.getString(LoginActivity.PREF_USER, null);
 
 		if (username == null) {
-			Intent i = new Intent(getApplicationContext(),
-					LoginActivity.class);
+			Intent i = new Intent(getApplicationContext(), LoginActivity.class);
 			this.finish();
 			startActivity(i);
 		}
-		
+
 		SharedPreferences sharedPrefs = PreferenceManager
 				.getDefaultSharedPreferences(this);
 

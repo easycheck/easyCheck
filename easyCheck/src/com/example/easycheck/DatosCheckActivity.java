@@ -15,7 +15,7 @@ import android.widget.Spinner;
 
 public class DatosCheckActivity extends Activity {
 
-	private Button btnConfirmar;
+	private Button btnConfirmar, btnNuevoContacto;
 	private CheckDAO dao;
 
 	// Place referece id
@@ -54,7 +54,7 @@ public class DatosCheckActivity extends Activity {
 		estados = new LinkedList<String>();
 		//La poblamos con los estados
 		estados.add("Manolito gafotas");
-		estados.add("Molino");
+		estados.add("Molino"); 
 		estados.add("Antonio");
 		estados.add("Ion Jauregui");
 		//Creamos el adaptador
@@ -62,6 +62,19 @@ public class DatosCheckActivity extends Activity {
 		//Añadimos el layout para el menú y se lo damos al spinner
 		spinner_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		sp.setAdapter(spinner_adapter);
+		
+		btnNuevoContacto = (Button) findViewById(R.id.button2);
+		
+		/** Button check click event for showing the business around you */
+		btnNuevoContacto.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				Intent i = new Intent(getApplicationContext(),
+						NuevoContactoActivity.class);
+				startActivity(i);
+			}
+		});
 		
 		/** button check **/
 		btnConfirmar = (Button) findViewById(R.id.button1);
@@ -75,6 +88,7 @@ public class DatosCheckActivity extends Activity {
 				dao.insert(reference, name);
 				Intent i = new Intent(getApplicationContext(),
 						FirstActivity.class);
+				i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				startActivity(i);
 			}
 		});
