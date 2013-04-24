@@ -3,6 +3,9 @@ package com.example.easycheck;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import yelp.BusinessListBean;
+import yelp.YelpConnector;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -28,6 +31,8 @@ import com.example.easycheck.bean.Place;
 import com.example.easycheck.bean.PlacesList;
 import com.example.easycheck.utils.AlertDialogManager;
 import com.example.easycheck.utils.GooglePlaces;
+
+import foursquare.FourSquareConnection;
 
 public class MainActivity extends Activity {
 
@@ -212,7 +217,14 @@ public class MainActivity extends Activity {
 
 				// get nearest places
 				nearPlaces = googlePlaces.search(lat, lon, radius, null);
-
+				
+//				new YelpConnector();
+				//FROM YELP
+//				BusinessListBean blb = YelpConnector.search("burritos", 30.361471, -87.164326);
+//				Log.d("YEEEELP", blb.getBusinesses().toString()+"Total de negocios:"+blb.getTotal());
+				
+//				FourSquareConnection.search(lat+","+lon, null, null, null, null, null, null, null, null, null, null);
+				
 			} catch (Exception e) {
 				e.printStackTrace();
 				Log.d("AAAAAAAAAAAAAAA", e.getMessage());
