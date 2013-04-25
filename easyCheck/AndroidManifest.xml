@@ -35,7 +35,7 @@
 
         <!-- FirstActivity -->
         <activity
-            android:name="com.example.easycheck.FirstActivity"
+            android:name="com.molihugo.easycheck.FirstActivity"
             android:label="@string/title_activity_first" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -46,54 +46,54 @@
 
         <!-- LoginActivity -->
         <activity
-            android:name="com.example.easycheck.LoginActivity"
+            android:name="com.molihugo.easycheck.LoginActivity"
             android:label="@string/title_activity_login"
             android:windowSoftInputMode="adjustResize|stateVisible" >
         </activity>
 
         <!-- BusinessListActivity -->
         <activity
-            android:name="com.example.easycheck.MainActivity"
+            android:name="com.molihugo.easycheck.MainActivity"
             android:label="@string/title_activity_main" >
         </activity>
 
         <!-- SinglePlaceActivity -->
         <activity
-            android:name="com.example.easycheck.SinglePlaceActivity"
+            android:name="com.molihugo.easycheck.SinglePlaceActivity"
             android:label="@string/title_activity_single_place" >
         </activity>
 
         <!-- PlacesMapActivity -->
         <activity
-            android:name="com.example.easycheck.PlacesMapActivity"
+            android:name="com.molihugo.easycheck.PlacesMapActivity"
             android:label="@string/title_activity_places_map" >
         </activity>
 
         <!-- SettingsActivity -->
         <activity
-            android:name="com.example.easycheck.SettingsActivity"
+            android:name="com.molihugo.easycheck.SettingsActivity"
             android:label="@string/title_activity_settings" >
         </activity>
 
         <!-- StatsActivity -->
         <activity
-            android:name="com.example.easycheck.StatsActivity"
+            android:name="com.molihugo.easycheck.StatsActivity"
             android:label="@string/title_activity_stats" >
         </activity>
 
         <!-- DatosCheckActivity -->
         <activity
-            android:name="com.example.easycheck.DatosCheckActivity"
+            android:name="com.molihugo.easycheck.DatosCheckActivity"
             android:label="@string/title_activity_datos_check" >
         </activity>
 
         <!-- JornadaActivity -->
         <activity
-            android:name="com.example.easycheck.JornadaActivity"
+            android:name="com.molihugo.easycheck.JornadaActivity"
             android:label="@string/title_activity_jornada" >
         </activity>
         <activity
-            android:name="com.example.easycheck.NuevoContactoActivity"
+            android:name="com.molihugo.easycheck.NuevoContactoActivity"
             android:label="@string/title_activity_nuevo_contacto" >
         </activity>
     </application>
