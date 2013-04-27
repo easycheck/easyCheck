@@ -1,7 +1,10 @@
 package com.molihugo.easycheck.apis.googleplaces;
 
+import java.io.Serializable;
 
-public class Geometry {
+
+public class Geometry implements Serializable{
+	private static final long serialVersionUID = 1L;
 	private Location location;
 	
 

@@ -1,5 +1,6 @@
 package com.molihugo.easycheck;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import android.content.Intent;
@@ -14,13 +15,14 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.molihugo.easycheck.bean.Place;
-import com.molihugo.easycheck.bean.PlacesList;
+import com.molihugo.easycheck.apis.googleplaces.SearchPlaceResult;
+import com.molihugo.easycheck.apis.googleplaces.SearchPlaceResults;
+import com.molihugo.easycheck.utils.Business;
 
 public class PlacesMapActivity extends android.support.v4.app.FragmentActivity {
 
 	// Nearest places
-	PlacesList nearPlaces;
+	ArrayList<Business> nearPlaces;
 	public static String KEY_REFERENCE = "reference"; // id of the place
 	public static String KEY_NAME = "name"; // name of the place
 
@@ -37,7 +39,7 @@ public class PlacesMapActivity extends android.support.v4.app.FragmentActivity {
 		double user_longitude = i.getExtras().getDouble("user_longitude");
 
 		// Near places list
-		nearPlaces = (PlacesList) i.getSerializableExtra("near_places");
+		nearPlaces = (ArrayList<Business>) i.getSerializableExtra("near_places");
 
 		GoogleMap mapa = ((SupportMapFragment) getSupportFragmentManager()
 				.findFragmentById(R.id.map)).getMap();
@@ -57,19 +59,19 @@ public class PlacesMapActivity extends android.support.v4.app.FragmentActivity {
 
 		final HashMap<String, String> map = new HashMap<String, String>();
 
-		for (Place place : nearPlaces.results) {
-			double latitude = place.geometry.location.lat; // latitude
-			double longitude = place.geometry.location.lng; // longitude
+		for (Business place : nearPlaces) {
+			String latitude = place.getLat(); // latitude
+			String longitude = place.getLon(); // longitude
 
 			MarkerOptions m = new MarkerOptions()
-					.position(new LatLng(latitude, longitude))
-					.title(place.name)
-					.snippet(place.vicinity);
+					.position(new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude)))
+					.title(place.getName())
+					.snippet(place.getAddress());
 
 			// Map item
 			Marker marker = mapa.addMarker(m);
 
-			map.put(marker.getId(), place.reference);
+			map.put(marker.getId(), place.getReference());
 		}
 
 		mapa.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
@@ -87,6 +89,7 @@ public class PlacesMapActivity extends android.support.v4.app.FragmentActivity {
 
 				in.putExtra(KEY_REFERENCE, ref);
 				in.putExtra(KEY_NAME, name);
+				in.putExtra("near_places", nearPlaces);
 				startActivity(in);
 			}
 		});

@@ -17,7 +17,7 @@ public class NuevoContactoActivity extends Activity {
 		setContentView(R.layout.activity_contacto);
 		
 		/** button jornada **/
-		btnGuardar = (Button) findViewById(R.id.button1);
+		btnGuardar = (Button) findViewById(R.id.button3);
 
 		/** para mostrar los checkins sin almacenar de la jornada actual */
 		btnGuardar.setOnClickListener(new View.OnClickListener() {

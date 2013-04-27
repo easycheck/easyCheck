@@ -1,7 +1,10 @@
 package com.molihugo.easycheck.apis.googleplaces;
 
+import java.io.Serializable;
 
-public class OpeningHours {
+
+public class OpeningHours implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private String open_now;
 
 	public String getOpen_now() {

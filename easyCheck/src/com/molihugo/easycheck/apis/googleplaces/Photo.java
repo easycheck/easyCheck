@@ -1,9 +1,11 @@
 package com.molihugo.easycheck.apis.googleplaces;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Photo {
+public class Photo implements Serializable{
 	
+	private static final long serialVersionUID = 1L;
 	private String height;
 	private List<String> html_attributions;
 	private String photo_reference;

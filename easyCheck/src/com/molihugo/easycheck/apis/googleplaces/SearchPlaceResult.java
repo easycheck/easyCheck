@@ -1,8 +1,10 @@
 package com.molihugo.easycheck.apis.googleplaces;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class SearchPlaceResult {
+public class SearchPlaceResult implements Serializable{
+	private static final long serialVersionUID = 1L;
 	private List<String> html_attributions;
 	private List<SearchPlaceResults> results;
 	private String status;

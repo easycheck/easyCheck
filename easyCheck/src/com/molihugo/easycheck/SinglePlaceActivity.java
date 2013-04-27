@@ -1,21 +1,20 @@
 package com.molihugo.easycheck;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.easycheck.R;
-import com.molihugo.easycheck.bean.PlaceDetails;
 import com.molihugo.easycheck.utils.AlertDialogManager;
+import com.molihugo.easycheck.utils.Business;
 import com.molihugo.easycheck.utils.ConnectionDetector;
-import com.molihugo.easycheck.utils.GooglePlaces;
 
 public class SinglePlaceActivity extends Activity {
 	// flag for Internet connection status
@@ -27,38 +26,73 @@ public class SinglePlaceActivity extends Activity {
 	// Alert Dialog Manager
 	AlertDialogManager alert = new AlertDialogManager();
 
-	// Google Places
-	GooglePlaces googlePlaces;
-
-	// Place Details
-	PlaceDetails placeDetails;
-
 	// Progress dialog
 	ProgressDialog pDialog;
 
 	// Button
 	Button btnSeguir;
+	
+	private String reference, name;
+	
+	// Nearest places
+	ArrayList<Business> nearPlaces;
+	
+	Business bu;
 
 	// KEY Strings
 	public static String KEY_REFERENCE = "reference"; // id of the place
 	public static String KEY_NAME = "name";
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.single_place);
 
 		Intent i = getIntent();
 
 		// Place referece id
-		final String reference = i.getStringExtra(KEY_REFERENCE);
-		final String name = i.getStringExtra(KEY_NAME);
+		reference = i.getStringExtra(KEY_REFERENCE);
+		name = i.getStringExtra(KEY_NAME);
+		nearPlaces = (ArrayList<Business>) i.getSerializableExtra("near_places");
 
-		// Calling a Async Background thread
-		new LoadSinglePlaceDetails().execute(reference);
+// Calling a Async Background thread
+//		new LoadSinglePlaceDetails().execute(reference);
+		
+		for (Business b : nearPlaces) {
+			
+			if (b.getReference().equalsIgnoreCase(reference)){
+				bu = new Business(b);
+			}
+			
+		}
+
+		TextView lbl_name = (TextView) findViewById(R.id.name);
+		TextView lbl_address = (TextView) findViewById(R.id.address);
+		TextView lbl_phone = (TextView) findViewById(R.id.phone);
+		TextView lbl_location = (TextView) findViewById(R.id.location);
+		TextView lbl_origin = (TextView) findViewById(R.id.TextView01);
+		TextView lbl_category = (TextView) findViewById(R.id.category);
+
+		lbl_name.setText(bu.getName());
+		lbl_address.setText(bu.getAddress());
+		lbl_category.setText(bu.getTypes().toString());
+		lbl_phone.setText(bu.getPhoneNumber());
+		String la, lo;
+		if (bu.getLat().length() > 6) {
+			la = bu.getLat().substring(0, 6);
+		} else {
+			la = bu.getLat();
+		}
+		if (bu.getLon().length() > 6) {
+			lo = bu.getLon().substring(0, 6);
+		} else {
+			lo = bu.getLon();
+		}
+		lbl_location.setText(Html.fromHtml("<b>Lat:</b> " + la
+				+ ", <b>Lon:</b> " + lo));
+		lbl_origin.setText(bu.getApi().toString());
 
 		/** button seguir **/
-		btnSeguir = (Button) findViewById(R.id.button1);
+		btnSeguir = (Button) findViewById(R.id.button3);
 
 		/** Button seguir click event for continue with this business */
 		btnSeguir.setOnClickListener(new View.OnClickListener() {
@@ -69,19 +103,20 @@ public class SinglePlaceActivity extends Activity {
 						DatosCheckActivity.class);
 				i.putExtra(KEY_REFERENCE, reference);
 				i.putExtra(KEY_NAME, name);
+				i.putExtra("business", bu);
 				startActivity(i);
 			}
 		});
 	}
-
-	/**
-	 * Background Async Task to Load Google places
-	 * */
+	
+/*
+	 //* Background Async Task to Load Google places
+	
 	class LoadSinglePlaceDetails extends AsyncTask<String, String, String> {
 
-		/**
-		 * Before starting background thread Show Progress Dialog
-		 * */
+		
+		//Before starting background thread Show Progress Dialog
+		
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
@@ -92,18 +127,18 @@ public class SinglePlaceActivity extends Activity {
 			pDialog.show();
 		}
 
-		/**
-		 * getting Profile JSON
-		 * */
+		
+		 // getting Profile JSON
+		 
 		protected String doInBackground(String... args) {
 			String reference = args[0];
 
 			// creating Places class object
-			googlePlaces = new GooglePlaces();
+//			googlePlaces = new GooglePlaces();
 
 			// Check if used is connected to Internet
 			try {
-				placeDetails = googlePlaces.getPlaceDetails(reference);
+//				placeDetails = googlePlaces.getPlaceDetails(reference);
 
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -111,18 +146,18 @@ public class SinglePlaceActivity extends Activity {
 			return null;
 		}
 
-		/**
-		 * After completing background task Dismiss the progress dialog
-		 * **/
+		
+		 // After completing background task Dismiss the progress dialog
+		 
 		protected void onPostExecute(String file_url) {
 			// dismiss the dialog after getting all products
 			pDialog.dismiss();
 			// updating UI from Background Thread
 			runOnUiThread(new Runnable() {
 				public void run() {
-					/**
-					 * Updating parsed Places into LISTVIEW
-					 * */
+					
+					 // Updating parsed Places into LISTVIEW
+					 
 					if (placeDetails != null) {
 						String status = placeDetails.status;
 
@@ -215,5 +250,5 @@ public class SinglePlaceActivity extends Activity {
 		}
 
 	}
-
+*/
 }

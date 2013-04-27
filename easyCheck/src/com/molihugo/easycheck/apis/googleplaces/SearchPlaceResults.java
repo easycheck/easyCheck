@@ -1,9 +1,11 @@
 package com.molihugo.easycheck.apis.googleplaces;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class SearchPlaceResults {
+public class SearchPlaceResults implements Serializable{
 	
+	private static final long serialVersionUID = 1L;
 	private Geometry geometry;
 	private String icon;
 	private String id;
@@ -17,21 +19,13 @@ public class SearchPlaceResults {
 	private String vicinity;
 	
 	
-	
-
 	public Geometry getGeometry() {
 		return geometry;
 	}
 
-
-
-
 	public void setGeometry(Geometry geometry) {
 		this.geometry = geometry;
 	}
-
-
-
 
 	public String getIcon() {
 		return icon;

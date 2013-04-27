@@ -3,6 +3,7 @@ package com.molihugo.easycheck;
 import java.util.LinkedList;
 
 import com.example.easycheck.R;
+import com.molihugo.easycheck.utils.Business;
 import com.molihugo.easycheck.utils.CheckDAO;
 
 import android.app.Activity;
@@ -18,13 +19,8 @@ public class DatosCheckActivity extends Activity {
 
 	private Button btnConfirmar, btnNuevoContacto;
 	private CheckDAO dao;
-
-	// Place referece id
-	 String reference;
-	 String name;
-
-	public static String KEY_REFERENCE = "reference"; // id of the place
-	public static String KEY_NAME = "name"; // name of the place
+	
+	Business bu;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -33,8 +29,7 @@ public class DatosCheckActivity extends Activity {
 		dao = new CheckDAO(this);
 		
 		Intent i = getIntent();
-		reference = i.getStringExtra(KEY_REFERENCE);
-		name = i.getStringExtra(KEY_NAME);
+		bu = (Business) i.getSerializableExtra("business");
 		
 		Spinner sp = (Spinner) findViewById(R.id.spinner1);
 		//Creamos la lista
@@ -78,7 +73,7 @@ public class DatosCheckActivity extends Activity {
 		});
 		
 		/** button check **/
-		btnConfirmar = (Button) findViewById(R.id.button1);
+		btnConfirmar = (Button) findViewById(R.id.button3);
 
 		/** Button check click event for showing the business around you */
 		btnConfirmar.setOnClickListener(new View.OnClickListener() {
@@ -86,7 +81,7 @@ public class DatosCheckActivity extends Activity {
 			@Override
 			public void onClick(View arg0) {
 				
-				dao.insert(reference, name);
+				dao.insert(bu);
 				Intent i = new Intent(getApplicationContext(),
 						FirstActivity.class);
 				i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

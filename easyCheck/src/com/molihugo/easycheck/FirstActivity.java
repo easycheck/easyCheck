@@ -36,7 +36,7 @@ public class FirstActivity extends Activity {
 		setContentView(R.layout.activity_first);
 
 		/** button check **/
-		btnCheck = (Button) findViewById(R.id.button1);
+		btnCheck = (Button) findViewById(R.id.button3);
 
 		cd = new ConnectionDetector(getApplicationContext());
 

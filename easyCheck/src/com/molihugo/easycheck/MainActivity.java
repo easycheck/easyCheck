@@ -28,14 +28,14 @@ import com.example.easycheck.R;
 import com.molihugo.easycheck.apis.foursquare.FourSquareConnection;
 import com.molihugo.easycheck.apis.googleplaces.GooglePlacesConnection;
 import com.molihugo.easycheck.apis.googleplaces.SearchPlaceResult;
+import com.molihugo.easycheck.apis.googleplaces.SearchPlaceResults;
+import com.molihugo.easycheck.apis.yelp.BusinessDetail;
 import com.molihugo.easycheck.apis.yelp.BusinessListBean;
 import com.molihugo.easycheck.apis.yelp.YelpConnector;
-import com.molihugo.easycheck.bean.Place;
-import com.molihugo.easycheck.bean.PlacesList;
 import com.molihugo.easycheck.utils.AlertDialogManager;
-import com.molihugo.easycheck.utils.GooglePlaces;
-
+import com.molihugo.easycheck.utils.Business;
 import fi.foyt.foursquare.api.Result;
+import fi.foyt.foursquare.api.entities.CompactVenue;
 import fi.foyt.foursquare.api.entities.VenuesSearchResult;
 
 public class MainActivity extends Activity {
@@ -45,8 +45,8 @@ public class MainActivity extends Activity {
 	private static double lon = 0, lat;
 
 	AlertDialogManager alert = new AlertDialogManager();
-	GooglePlaces googlePlaces;
-	PlacesList nearPlaces;
+	SearchPlaceResult nearPlaces;
+	ArrayList<Business> negocios;
 	Button btnShowOnMap;
 	ProgressDialog pDialog;
 	ListView lv;
@@ -61,26 +61,29 @@ public class MainActivity extends Activity {
 	boolean apis[] = new boolean[3];
 
 	MyLocationListener listener;
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		listener = new MyLocationListener();
-		
+
 		// Get the location manager
 		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		
-		final boolean gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
-		    if (!gpsEnabled) {
-		        // Build an alert dialog here that requests that the user enable
-		        // the location services, then when the user clicks the "OK" button,
-		        // call enableLocationSettings()
-		    }
-		
-		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, listener);
-		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, listener);
+		final boolean gpsEnabled = locationManager
+				.isProviderEnabled(LocationManager.GPS_PROVIDER);
+
+		if (!gpsEnabled) {
+			// Build an alert dialog here that requests that the user enable
+			// the location services, then when the user clicks the "OK" button,
+			// call enableLocationSettings()
+		}
+
+		locationManager.requestLocationUpdates(
+				LocationManager.NETWORK_PROVIDER, 0, 0, listener);
+		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0,
+				0, listener);
 
 		setContentView(R.layout.activity_main);
 
@@ -89,20 +92,19 @@ public class MainActivity extends Activity {
 		apis[0] = getIntent().getExtras().getBoolean("google");
 		apis[1] = getIntent().getExtras().getBoolean("foursquare");
 		apis[2] = getIntent().getExtras().getBoolean("yelp");
-		
+
 		if (lon == 0) {
 			Log.d("ERROR Location", "NOT LOADED");
 		} else {
-			Log.d("Your Location", "latitude:" + lat
-					+ ", longitude: " + lon);
+			Log.d("Your Location", "latitude:" + lat + ", longitude: " + lon);
 		}
-		
+
 		// Getting listview
 		lv = (ListView) findViewById(R.id.list);
 
 		// button show on map
 		btnShowOnMap = (Button) findViewById(R.id.btn_show_map);
-		
+
 		/** Button click event for shown on map */
 		btnShowOnMap.setOnClickListener(new View.OnClickListener() {
 
@@ -117,12 +119,12 @@ public class MainActivity extends Activity {
 				i.putExtra("user_latitude", lat);
 				i.putExtra("user_longitude", lon);
 				// passing near places to map activity
-				i.putExtra("near_places", nearPlaces);
+				i.putExtra("near_places", negocios);
 				// staring activity
 				startActivity(i);
 			}
 		});
-		
+
 		new LoadPlaces().execute();
 
 		/**
@@ -137,9 +139,9 @@ public class MainActivity extends Activity {
 				// getting values from selected ListItem
 				String reference = ((TextView) view
 						.findViewById(R.id.reference)).getText().toString();
-				
-				String name = ((TextView) view
-						.findViewById(R.id.name)).getText().toString();
+
+				String name = ((TextView) view.findViewById(R.id.name))
+						.getText().toString();
 
 				// Starting new intent
 				Intent in = new Intent(getApplicationContext(),
@@ -149,6 +151,9 @@ public class MainActivity extends Activity {
 				// place refrence id used to get "Place full details"
 				in.putExtra(KEY_REFERENCE, reference);
 				in.putExtra(KEY_NAME, name);
+				// passing near places to map activity
+				in.putExtra("near_places", negocios);
+
 				startActivity(in);
 			}
 		});
@@ -160,10 +165,11 @@ public class MainActivity extends Activity {
 		// Remove the listener you previously added
 		locationManager.removeUpdates(listener);
 	}
-	
+
 	private void enableLocationSettings() {
-	    Intent settingsIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-	    startActivity(settingsIntent);
+		Intent settingsIntent = new Intent(
+				Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+		startActivity(settingsIntent);
 	}
 
 	@Override
@@ -184,7 +190,7 @@ public class MainActivity extends Activity {
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			lon=0;
+			lon = 0;
 			pDialog = new ProgressDialog(MainActivity.this);
 
 			pDialog.setMessage(Html
@@ -198,98 +204,49 @@ public class MainActivity extends Activity {
 		 * getting Places JSON
 		 * */
 		protected String doInBackground(String... args) {
-			
+
 			// creating Places class object
-			googlePlaces = new GooglePlaces();
+			// googlePlaces = new GooglePlaces();
 
 			try {
 				// Separeate your place types by PIPE symbol "|"
 				// If you want all types places make it as null
 				// Check list of types supported by google
 				//
-				// String types = "cafe|restaurant"; // Listing places only cafes, restaurants
+				// String types = "cafe|restaurant"; // Listing places only
+				// cafes, restaurants
 
-				// Radius in meters - increase this value if you don't find any places
+				// Radius in meters - increase this value if you don't find any
+				// places
 				double radius = 1000; // 1000 meters
 
 				Log.d("AAAAAAAAAAAAAAA", lat + "-lat & long-" + lon);
-				
-				while (lon == 0){
-				};
-				
+
+				while (lon == 0) {
+				}
+				;
+
 				Log.d("AAAAAAAAAAAAAAA", lat + "-lat & long-" + lon);
 
-				// get nearest places
-				nearPlaces = googlePlaces.search(lat, lon, radius, null);
-				
-				String location = lat+","+lon;
-				SearchPlaceResult gres = GooglePlacesConnection.searchPlaces(location, "1000", null);
-				Log.d("GOOOGLEEEEPLACEEESS", gres.toString()+"Total de negocios:"+gres.getResults().size());
-				
-				
-//				Result<VenuesSearchResult> res = FourSquareConnection.search(lat+","+lon, null, null, null, null, null, null, null, null, null, null);
-//				Log.d("FOUSQUAAAAREEEE", res.getResult().toString()+"Total de negocios:"+res.getResult().getVenues().length);
-				
-				
-				new YelpConnector();
-				//FROM YELP
-				BusinessListBean blb = YelpConnector.search("", lat, lon);
-				Log.d("YEEEEEEEEELP", blb.getBusinesses().toString()+"Total de negocios:"+blb.getTotal());
-				
-				
-			} catch (Exception e) {
-				e.printStackTrace();
-				Log.d("AAAAAAAAAAAAAAA", e.getMessage());
-			}
-			return null;
-		}
+				// FROM GOOGLE PLACES
+				String location = lat + "," + lon;
+				nearPlaces = GooglePlacesConnection.searchPlaces(lat, lon,
+						radius, null);
+				Log.d("GOOOGLEEEEPLACEEESS", nearPlaces.getResults().toString()
+						+ "Total de negocios:" + nearPlaces.getResults().size());
 
-		/**
-		 * After completing background task Dismiss the progress dialog and show
-		 * the data in UI Always use runOnUiThread(new Runnable()) to update UI
-		 * from background thread, otherwise you will get error
-		 * **/
-		protected void onPostExecute(String file_url) {
-			// dismiss the dialog after getting all products
-			pDialog.dismiss();
-			// updating UI from Background Thread
-			runOnUiThread(new Runnable() {
-				public void run() {
-					/**
-					 * Updating parsed Places into LISTVIEW
-					 * */
-					// Get json response status
-					String status = nearPlaces.status;
+				String status = nearPlaces.getStatus();
+				negocios = new ArrayList<Business>();
 
-					// Check for all possible status
-					if (status.equals("OK")) {
-						// Successfully got places details
-						if (nearPlaces.results != null) {
-							// loop through each place
-							for (Place p : nearPlaces.results) {
-								HashMap<String, String> map = new HashMap<String, String>();
+				// Check for all possible status
+				if (status.equals("OK")) {
+					// Successfully got places details
+					if (nearPlaces.getResults() != null) {
+						// loop through each place
+						for (SearchPlaceResults p : nearPlaces.getResults()) {
 
-								// Place reference won't display in listview -
-								// it will be hidden
-								// Place reference is used to get
-								// "place full details"
-								map.put(KEY_REFERENCE, p.reference);
+							negocios.add(new Business(p));
 
-								// Place name
-								map.put(KEY_NAME, p.name);
-
-								// adding HashMap to ArrayList
-								placesListItems.add(map);
-							}
-							// list adapter
-							ListAdapter adapter = new SimpleAdapter(
-									MainActivity.this, placesListItems,
-									R.layout.list_item, new String[] {
-											KEY_REFERENCE, KEY_NAME },
-									new int[] { R.id.reference, R.id.name });
-
-							// Adding data into listview
-							lv.setAdapter(adapter);
 						}
 					} else if (status.equals("ZERO_RESULTS")) {
 						// Zero results found
@@ -321,6 +278,97 @@ public class MainActivity extends Activity {
 								"Places Error", "Sorry error occured.", false);
 					}
 				}
+
+				// FROM FOURSQQUARE
+				Result<VenuesSearchResult> result = null;
+				result = FourSquareConnection.search(lat, lon);
+
+				if (result.getMeta().getCode() == 200) {
+					// if query was ok we can finally we do something with the
+					// data
+					for (CompactVenue venue : result.getResult().getVenues()) {
+						negocios.add(new Business(venue));
+						;
+					}
+				} else {
+					Log.d("FOUSQUAAAAREEEE", "Error occured: ");
+					Log.d("FOUSQUAAAAREEEE", "  code: "
+							+ result.getMeta().getCode());
+					Log.d("FOUSQUAAAAREEEE", "  type: "
+							+ result.getMeta().getErrorType());
+					Log.d("FOUSQUAAAAREEEE", "  detail: "
+							+ result.getMeta().getErrorDetail());
+				}
+
+				// FROM YELP
+				new YelpConnector();
+				BusinessListBean blb = YelpConnector.search("", lat, lon);
+				Log.d("YEEEEEEEEELP", blb.getBusinesses().toString()
+						+ "Total de negocios:" + blb.getTotal());
+
+				for (BusinessDetail bD : blb.getBusinesses()) {
+
+					negocios.add(new Business(bD));
+
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				Log.d("AAAAAAAAAAAAAAA", e.getMessage());
+			}
+			return null;
+		}
+
+		/**
+		 * After completing background task Dismiss the progress dialog and show
+		 * the data in UI Always use runOnUiThread(new Runnable()) to update UI
+		 * from background thread, otherwise you will get error
+		 * **/
+		protected void onPostExecute(String file_url) {
+			// dismiss the dialog after getting all products
+			pDialog.dismiss();
+			// updating UI from Background Thread
+			runOnUiThread(new Runnable() {
+				public void run() {
+					/**
+					 * Updating parsed Places into LISTVIEW 683591264 618456527
+					 * 681456527 juantxu sodupe
+					 * */
+					if (!negocios.isEmpty()) {
+						// loop through each place
+						for (Business b : negocios) {
+							HashMap<String, String> map = new HashMap<String, String>();
+
+							// Place reference won't display in listview -
+							// it will be hidden
+							// Place reference is used to get
+							// "place full details"
+							map.put(KEY_REFERENCE, b.getReference());
+							// Place name
+							map.put(KEY_NAME, b.getName());
+
+							// adding HashMap to ArrayList
+							placesListItems.add(map);
+						}
+						// list adapter
+						ListAdapter adapter = new SimpleAdapter(
+								MainActivity.this, placesListItems,
+								R.layout.list_item, new String[] {
+										KEY_REFERENCE, KEY_NAME }, new int[] {
+										R.id.reference, R.id.name });
+
+						// Adding data into listview
+						lv.setAdapter(adapter);
+					} else {
+						// Zero results found
+						alert.showAlertDialog(
+								MainActivity.this,
+								"Near Places",
+								"Sorry no places found. Try to change the types of places",
+								false);
+					}
+				}
+
 			});
 
 		}

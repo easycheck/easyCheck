@@ -13,16 +13,19 @@ import com.google.gson.JsonSyntaxException;
 
 public class GooglePlacesConnection {
 	
-	public static SearchPlaceResult searchPlaces(String location, String radius, String types) throws IOException{
+	public static SearchPlaceResult searchPlaces(double lat, double lon, double radius, String types) throws IOException{
 		
+		String location = lat+","+lon;
 		String json;
 		StringBuilder url = new StringBuilder();
 		url.append("https://maps.googleapis.com/maps/api/place/search/json?location=");
 		url.append(location);
 		url.append("&radius=");
 		url.append(radius);
-		url.append("&types=");
-		url.append(types);
+		if(types != null){
+			url.append("&types=");
+			url.append(types);
+		}
 		url.append("&sensor=true&key=AIzaSyCzS6ydk7z_7cOuOfqnDt0k4FQCdRoT58c");
 		URL google = new URL(url.toString());
 		HttpURLConnection connection = (HttpURLConnection) google.openConnection();

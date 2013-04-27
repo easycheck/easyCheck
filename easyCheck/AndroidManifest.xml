@@ -96,6 +96,10 @@
             android:name="com.molihugo.easycheck.NuevoContactoActivity"
             android:label="@string/title_activity_nuevo_contacto" >
         </activity>
+        <activity
+            android:name="com.molihugo.easycheck.VisitaActivity"
+            android:label="@string/title_activity_visita" >
+        </activity>
     </application>
 
 </manifest>

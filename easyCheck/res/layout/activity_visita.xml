@@ -13,21 +13,13 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dip"
         android:layout_marginTop="10dip"
-        android:text="Nombre:"
+        android:text="Datos de la visita:"
         android:textStyle="bold" />
 
     <TextView
         android:id="@+id/name"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" />
-
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5dip"
-        android:layout_marginTop="10dip"
-        android:text="Tipo/Categoria:"
-        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/category"
@@ -37,29 +29,15 @@
     <!--  Name Value -->
  
     <!-- Address Label -->
-    <TextView
-        android:text="Direccion:"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dip"
-        android:layout_marginBottom="5dip"
-        android:textStyle="bold"/>
  
     <!--  Address Value -->
+
     <TextView
         android:id="@+id/address"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"/>
  
     <!-- Phone Number Label -->
-
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5dip"
-        android:layout_marginTop="10dip"
-        android:text="Teléfono:"
-        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/phone"
@@ -69,25 +47,9 @@
     <!-- Location Value -->
 
     <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5dip"
-        android:layout_marginTop="10dip"
-        android:text="Coordenadas:"
-        android:textStyle="bold" />
-
-    <TextView
         android:id="@+id/location"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"/>
-
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5dip"
-        android:layout_marginTop="10dip"
-        android:text="Origen de la info:"
-        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/TextView01"
@@ -95,22 +57,33 @@
         android:layout_height="wrap_content" 
         android:layout_marginBottom="5dip"/>
 
+    <TextView
+        android:id="@+id/TextView02"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dip" />
+
+    <TextView
+        android:id="@+id/TextView03"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dip" />
+
+    <TextView
+        android:id="@+id/TextView04"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dip" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
         <Button
-            android:id="@+id/button1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Mostrar en el Mapa" />
-
-        <Button
             android:id="@+id/button3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/btn_adelante" />
-
+            android:text="Vale!" />
     </LinearLayout>
  
 </LinearLayout>
