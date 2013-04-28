@@ -1,10 +1,16 @@
 package com.molihugo.easycheck;
 
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+
+import org.apache.http.client.ClientProtocolException;
+
 import android.app.Activity;
-import android.content.Intent;
+import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
@@ -15,6 +21,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.easycheck.R;
+import com.molihugo.easycheck.apis.sugar.SugarConnection;
 import com.molihugo.easycheck.utils.AlertDialogManager;
 import com.molihugo.easycheck.utils.ConnectionDetector;
 
@@ -58,6 +65,7 @@ public class LoginActivity extends Activity {
 	private ConnectionDetector cd;
 	private boolean isInternetPresent;
 	private AlertDialogManager alert;
+	private ProgressDialog pDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -193,70 +201,45 @@ public class LoginActivity extends Activity {
 	}
 
 	/**
-	 * Shows the progress UI and hides the login form.
-	 */
-/*
-	 @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-	private void showProgress(final boolean show) {
-		// On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-		// for very easy animations.
-		// If available, use these APIs to fade-in the progress spinner.
-
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-			int shortAnimTime = getResources().getInteger(
-					android.R.integer.config_shortAnimTime);
-
-			mLoginStatusView.setVisibility(View.VISIBLE);
-			mLoginStatusView.animate().setDuration(shortAnimTime)
-					.alpha(show ? 1 : 0)
-					.setListener(new AnimatorListenerAdapter() {
-
-						@Override
-						public void onAnimationEnd(Animator animation) {
-							mLoginStatusView.setVisibility(show ? View.VISIBLE
-									: View.GONE);
-						}
-					});
-
-			mLoginFormView.setVisibility(View.VISIBLE);
-			mLoginFormView.animate().setDuration(shortAnimTime)
-					.alpha(show ? 0 : 1)
-					.setListener(new AnimatorListenerAdapter() {
-
-						@Override
-						public void onAnimationEnd(Animator animation) {
-							mLoginFormView.setVisibility(show ? View.GONE
-									: View.VISIBLE);
-						}
-					});
-		} else { 
-			// The ViewPropertyAnimator APIs are not available, so simply
-			// show
-			// and hide the relevant UI components.
-			mLoginStatusView.setVisibility(show ? View.VISIBLE : View.GONE);
-			mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-		}
-	}
-	
-	*/
-
-	/**
 	 * Represents an asynchronous login/registration task used to authenticate
 	 * the user.
 	 */
 	public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+		
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			/**
+			 * Shows the progress dialog and hides the login form.
+			 */
+			pDialog = new ProgressDialog(LoginActivity.this);
+
+			pDialog.setMessage(Html
+					.fromHtml("<b>Busqueda</b><br/>Cargando Negocios..."));
+			pDialog.setIndeterminate(false);
+			pDialog.setCancelable(false);
+			pDialog.show();
+		}
 		@Override
 		protected Boolean doInBackground(Void... params) {
-			// TODO: attempt authentication against a network service.
-
+			
+			String id;
 			try {
-				// Simulate network access.
-				Thread.sleep(2000);
-			} catch (InterruptedException e) {
-				return false;
+				id = SugarConnection.login(mEmail, mPassword);
+				
+				if (id.equals(null)){
+					return false;
+				}
+				
+			} catch (NoSuchAlgorithmException e) {
+				e.printStackTrace();
+			} catch (ClientProtocolException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 
-			for (String credential : DUMMY_CREDENTIALS) {
+/*			for (String credential : DUMMY_CREDENTIALS) {
 				String[] pieces = credential.split(":");
 				if (pieces[0].equals(mEmail)) {
 					// Account exists, return true if the password matches.
@@ -272,7 +255,7 @@ public class LoginActivity extends Activity {
 				} else
 					return false;
 			}
-
+*/
 			// TODO: register the new account here.
 			return true;
 		}

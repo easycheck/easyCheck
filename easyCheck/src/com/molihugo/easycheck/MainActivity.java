@@ -229,86 +229,98 @@ public class MainActivity extends Activity {
 				Log.d("AAAAAAAAAAAAAAA", lat + "-lat & long-" + lon);
 
 				// FROM GOOGLE PLACES
-				String location = lat + "," + lon;
-				nearPlaces = GooglePlacesConnection.searchPlaces(lat, lon,
-						radius, null);
-				Log.d("GOOOGLEEEEPLACEEESS", nearPlaces.getResults().toString()
-						+ "Total de negocios:" + nearPlaces.getResults().size());
+				//if (apis[0] == true) {
+					nearPlaces = GooglePlacesConnection.searchPlaces(lat, lon,
+							radius, null);
+					Log.d("GOOOGLEEEEPLACEEESS", nearPlaces.getResults()
+							.toString()
+							+ "Total de negocios:"
+							+ nearPlaces.getResults().size());
 
-				String status = nearPlaces.getStatus();
-				negocios = new ArrayList<Business>();
+					String status = nearPlaces.getStatus();
+					negocios = new ArrayList<Business>();
 
-				// Check for all possible status
-				if (status.equals("OK")) {
-					// Successfully got places details
-					if (nearPlaces.getResults() != null) {
-						// loop through each place
-						for (SearchPlaceResults p : nearPlaces.getResults()) {
+					// Check for all possible status
+					if (status.equals("OK")) {
+						// Successfully got places details
+						if (nearPlaces.getResults() != null) {
+							// loop through each place
+							for (SearchPlaceResults p : nearPlaces.getResults()) {
 
-							negocios.add(new Business(p));
+								negocios.add(new Business(p));
 
+							}
+						} else if (status.equals("ZERO_RESULTS")) {
+							// Zero results found
+							alert.showAlertDialog(
+									MainActivity.this,
+									"Near Places",
+									"Sorry no places found. Try to change the types of places",
+									false);
+						} else if (status.equals("UNKNOWN_ERROR")) {
+							alert.showAlertDialog(MainActivity.this,
+									"Places Error",
+									"Sorry unknown error occured.", false);
+						} else if (status.equals("OVER_QUERY_LIMIT")) {
+							alert.showAlertDialog(
+									MainActivity.this,
+									"Places Error",
+									"Sorry query limit to google places is reached",
+									false);
+						} else if (status.equals("REQUEST_DENIED")) {
+							alert.showAlertDialog(MainActivity.this,
+									"Places Error",
+									"Sorry error occured. Request is denied",
+									false);
+						} else if (status.equals("INVALID_REQUEST")) {
+							alert.showAlertDialog(MainActivity.this,
+									"Places Error",
+									"Sorry error occured. Invalid Request",
+									false);
+						} else {
+							alert.showAlertDialog(MainActivity.this,
+									"Places Error", "Sorry error occured.",
+									false);
 						}
-					} else if (status.equals("ZERO_RESULTS")) {
-						// Zero results found
-						alert.showAlertDialog(
-								MainActivity.this,
-								"Near Places",
-								"Sorry no places found. Try to change the types of places",
-								false);
-					} else if (status.equals("UNKNOWN_ERROR")) {
-						alert.showAlertDialog(MainActivity.this,
-								"Places Error", "Sorry unknown error occured.",
-								false);
-					} else if (status.equals("OVER_QUERY_LIMIT")) {
-						alert.showAlertDialog(
-								MainActivity.this,
-								"Places Error",
-								"Sorry query limit to google places is reached",
-								false);
-					} else if (status.equals("REQUEST_DENIED")) {
-						alert.showAlertDialog(MainActivity.this,
-								"Places Error",
-								"Sorry error occured. Request is denied", false);
-					} else if (status.equals("INVALID_REQUEST")) {
-						alert.showAlertDialog(MainActivity.this,
-								"Places Error",
-								"Sorry error occured. Invalid Request", false);
-					} else {
-						alert.showAlertDialog(MainActivity.this,
-								"Places Error", "Sorry error occured.", false);
 					}
-				}
+			//	}
 
 				// FROM FOURSQQUARE
-				Result<VenuesSearchResult> result = null;
-				result = FourSquareConnection.search(lat, lon);
+				if (apis[2] == true) {
 
-				if (result.getMeta().getCode() == 200) {
-					// if query was ok we can finally we do something with the
-					// data
-					for (CompactVenue venue : result.getResult().getVenues()) {
-						negocios.add(new Business(venue));
-						;
+					Result<VenuesSearchResult> result = null;
+					result = FourSquareConnection.search(lat, lon);
+
+					if (result.getMeta().getCode() == 200) {
+						// if query was ok we can finally we do something with
+						// the
+						// data
+						for (CompactVenue venue : result.getResult()
+								.getVenues()) {
+							negocios.add(new Business(venue));
+							;
+						}
+					} else {
+						Log.d("FOUSQUAAAAREEEE", "Error occured: ");
+						Log.d("FOUSQUAAAAREEEE", "  code: "
+								+ result.getMeta().getCode());
+						Log.d("FOUSQUAAAAREEEE", "  type: "
+								+ result.getMeta().getErrorType());
+						Log.d("FOUSQUAAAAREEEE", "  detail: "
+								+ result.getMeta().getErrorDetail());
 					}
-				} else {
-					Log.d("FOUSQUAAAAREEEE", "Error occured: ");
-					Log.d("FOUSQUAAAAREEEE", "  code: "
-							+ result.getMeta().getCode());
-					Log.d("FOUSQUAAAAREEEE", "  type: "
-							+ result.getMeta().getErrorType());
-					Log.d("FOUSQUAAAAREEEE", "  detail: "
-							+ result.getMeta().getErrorDetail());
-				}
 
-				// FROM YELP
-				new YelpConnector();
-				BusinessListBean blb = YelpConnector.search("", lat, lon);
-				Log.d("YEEEEEEEEELP", blb.getBusinesses().toString()
-						+ "Total de negocios:" + blb.getTotal());
+					// FROM YELP
+					new YelpConnector();
+					BusinessListBean blb = YelpConnector.search("", lat, lon);
+					Log.d("YEEEEEEEEELP", blb.getBusinesses().toString()
+							+ "Total de negocios:" + blb.getTotal());
 
-				for (BusinessDetail bD : blb.getBusinesses()) {
+					for (BusinessDetail bD : blb.getBusinesses()) {
 
-					negocios.add(new Business(bD));
+						negocios.add(new Business(bD));
+
+					}
 
 				}
 

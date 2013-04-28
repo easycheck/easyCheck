@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -132,6 +133,7 @@ public class FirstActivity extends Activity {
 		apis[1] = sharedPrefs.getBoolean("Foursquare", false);
 		apis[2] = sharedPrefs.getBoolean("Yelp", false);
 		fondo = sharedPrefs.getString("Fondo", "negro");
+		//Log.d("APIS", apis[0]);
 
 		if (fondo.equalsIgnoreCase("azul")) {
 			color = Color.BLUE;

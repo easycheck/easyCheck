@@ -37,5 +37,6 @@
     <string name="btn_guardar">Guardar Visita</string>
     <string name="title_activity_nuevo_contacto">Nuevo Contacto</string>
     <string name="title_activity_visita">VisitaActivity</string>
+    <string name="lbl_newContacto">Datos del nuevo contacto</string>
 
 </resources>
