@@ -229,7 +229,7 @@ public class MainActivity extends Activity {
 				Log.d("AAAAAAAAAAAAAAA", lat + "-lat & long-" + lon);
 
 				// FROM GOOGLE PLACES
-				//if (apis[0] == true) {
+				if (apis[0]) {
 					nearPlaces = GooglePlacesConnection.searchPlaces(lat, lon,
 							radius, null);
 					Log.d("GOOOGLEEEEPLACEEESS", nearPlaces.getResults()
@@ -283,10 +283,10 @@ public class MainActivity extends Activity {
 									false);
 						}
 					}
-			//	}
+				}
 
-				// FROM FOURSQQUARE
-				if (apis[2] == true) {
+				// FROM FOURSQUARE
+				if (apis[1]) {
 
 					Result<VenuesSearchResult> result = null;
 					result = FourSquareConnection.search(lat, lon);
@@ -309,8 +309,10 @@ public class MainActivity extends Activity {
 						Log.d("FOUSQUAAAAREEEE", "  detail: "
 								+ result.getMeta().getErrorDetail());
 					}
+				}
 
-					// FROM YELP
+				// FROM YELP
+				if (apis[2]) {
 					new YelpConnector();
 					BusinessListBean blb = YelpConnector.search("", lat, lon);
 					Log.d("YEEEEEEEEELP", blb.getBusinesses().toString()

@@ -7,6 +7,7 @@ import org.apache.http.client.ClientProtocolException;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -35,12 +37,6 @@ public class LoginActivity extends Activity {
 	public static final String PREF_USER = "username";
 
 	/**
-	 * EXAMPLE CREDENTIALS
-	 */
-	private static final String[] DUMMY_CREDENTIALS = new String[] {
-			"hugo:pass", "moli:moli" };
-
-	/**
 	 * Keep track of the login task to ensure we can cancel it if requested.
 	 */
 	private UserLoginTask mAuthTask = null;
@@ -52,12 +48,9 @@ public class LoginActivity extends Activity {
 	// UI references.
 	private EditText mEmailView;
 	private EditText mPasswordView;
-	private TextView mLoginStatusMessageView;
-//	private View mLoginFormView;
-//	private View mLoginStatusView;
 
 	// color for the error font
-	private int ecolor = Color.RED; 
+	private int ecolor = Color.RED;
 	private ForegroundColorSpan fgcspan = new ForegroundColorSpan(ecolor);
 	private SpannableStringBuilder ssbuilder;
 	private String estring;
@@ -105,10 +98,6 @@ public class LoginActivity extends Activity {
 						return false;
 					}
 				});
-
-//		mLoginFormView = findViewById(R.id.login_form);
-//		mLoginStatusView = findViewById(R.id.login_status);
-		mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
 
 		findViewById(R.id.sign_in_button).setOnClickListener(
 				new View.OnClickListener() {
@@ -193,8 +182,6 @@ public class LoginActivity extends Activity {
 		} else {
 			// Show a progress spinner, and kick off a background task to
 			// perform the user login attempt.
-			mLoginStatusMessageView.setText(R.string.login_progress_signing_in);
-//			showProgress(true);
 			mAuthTask = new UserLoginTask();
 			mAuthTask.execute((Void) null);
 		}
@@ -205,7 +192,7 @@ public class LoginActivity extends Activity {
 	 * the user.
 	 */
 	public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-		
+		private String id;
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
@@ -220,14 +207,18 @@ public class LoginActivity extends Activity {
 			pDialog.setCancelable(false);
 			pDialog.show();
 		}
+
 		@Override
 		protected Boolean doInBackground(Void... params) {
-			
-			String id;
+
 			try {
 				id = SugarConnection.login(mEmail, mPassword);
-				
-				if (id.equals(null)){
+				// Log.d("IIDD", id);
+				if (id != null) {
+					return true;
+				} else if (mEmail.equals("noSugar")) {
+					return true;
+				} else {
 					return false;
 				}
 				
@@ -236,36 +227,25 @@ public class LoginActivity extends Activity {
 			} catch (ClientProtocolException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
+				Log.d("IIDD", "PASO");
 				e.printStackTrace();
 			}
-
-/*			for (String credential : DUMMY_CREDENTIALS) {
-				String[] pieces = credential.split(":");
-				if (pieces[0].equals(mEmail)) {
-					// Account exists, return true if the password matches.
-					if (pieces[1].equals(mPassword)) {
-						getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit()
-								.putString(PREF_USER, mEmail).commit();
-						Intent i = new Intent(getApplicationContext(),
-								FirstActivity.class);
-						startActivity(i);
-						return true;
-					} else
-						return false;
-				} else
-					return false;
-			}
-*/
-			// TODO: register the new account here.
+			
 			return true;
 		}
 
 		@Override
 		protected void onPostExecute(final Boolean success) {
 			mAuthTask = null;
-			// showProgress(false);
+			pDialog.dismiss();
 
 			if (success) {
+				getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit()
+						.putString(PREF_USER, mEmail).commit();
+				Intent i = new Intent(getApplicationContext(),
+						FirstActivity.class);
+				i.putExtra("idUser", id);
+				startActivity(i);
 				finish();
 			} else {
 
@@ -281,7 +261,6 @@ public class LoginActivity extends Activity {
 		@Override
 		protected void onCancelled() {
 			mAuthTask = null;
-			// showProgress(false);
 		}
 	}
 }

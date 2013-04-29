@@ -35,6 +35,9 @@ public class FirstActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_first);
+		
+		PreferenceManager
+				.setDefaultValues(this, R.xml.opciones, false);
 
 		/** button check **/
 		btnCheck = (Button) findViewById(R.id.button3);
@@ -122,8 +125,8 @@ public class FirstActivity extends Activity {
 
 		if (username == null) {
 			Intent i = new Intent(getApplicationContext(), LoginActivity.class);
-			this.finish();
 			startActivity(i);
+			this.finish();
 		}
 
 		SharedPreferences sharedPrefs = PreferenceManager
@@ -133,7 +136,9 @@ public class FirstActivity extends Activity {
 		apis[1] = sharedPrefs.getBoolean("Foursquare", false);
 		apis[2] = sharedPrefs.getBoolean("Yelp", false);
 		fondo = sharedPrefs.getString("Fondo", "negro");
-		//Log.d("APIS", apis[0]);
+		Log.d("APIS-0", String.valueOf(apis[0]));
+		Log.d("APIS-1", String.valueOf(apis[1]));
+		Log.d("APIS-2", String.valueOf(apis[2]));
 
 		if (fondo.equalsIgnoreCase("azul")) {
 			color = Color.BLUE;

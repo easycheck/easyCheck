@@ -2,7 +2,7 @@ package com.molihugo.easycheck.apis.sugar;
 
 public class Constantes {
 	
-	public static final String URL = "http://192.168.43.40/SugarCE/service/v4/rest.php?";
+	public static final String URL = "http://192.168.42.88:80/SugarCE6.5.9/service/v4/rest.php?";
 	public static final String JSON = "JSON";
 	public static final String LOGIN = "login";
 	public static final String APPLICATION_NAME = "SugarCE";
