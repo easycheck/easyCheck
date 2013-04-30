@@ -1,7 +1,7 @@
 package com.molihugo.easycheck;
 
 import com.example.easycheck.R;
-import com.molihugo.easycheck.utils.Business;
+import com.molihugo.easycheck.beans.Business;
 
 import android.os.Bundle;
 import android.app.Activity;

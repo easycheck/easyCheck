@@ -17,7 +17,7 @@ import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
 import com.example.easycheck.R;
-import com.molihugo.easycheck.utils.Business;
+import com.molihugo.easycheck.beans.Business;
 import com.molihugo.easycheck.utils.CheckDAO;
 
 public class JornadaActivity extends Activity {

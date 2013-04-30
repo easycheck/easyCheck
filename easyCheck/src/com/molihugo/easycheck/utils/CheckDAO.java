@@ -3,6 +3,8 @@ package com.molihugo.easycheck.utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.molihugo.easycheck.beans.Business;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -65,7 +67,8 @@ public class CheckDAO {
 		values.put(DatabaseConstants.COLUMN_NAME_PHONE, b.getPhoneNumber());
 		values.put(DatabaseConstants.COLUMN_NAME_LAT, b.getLat());
 		values.put(DatabaseConstants.COLUMN_NAME_LON, b.getLon());
-		values.put(DatabaseConstants.COLUMN_NAME_DATAORIGIN, b.getApi().toString());
+		values.put(DatabaseConstants.COLUMN_NAME_DATAORIGIN, b.getApi()
+				.toString());
 
 		// Insert the new row, returning the primary key value of the new row
 		long newRowId;

@@ -17,7 +17,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.molihugo.easycheck.apis.googleplaces.SearchPlaceResult;
 import com.molihugo.easycheck.apis.googleplaces.SearchPlaceResults;
-import com.molihugo.easycheck.utils.Business;
+import com.molihugo.easycheck.beans.Business;
 
 public class PlacesMapActivity extends android.support.v4.app.FragmentActivity {
 

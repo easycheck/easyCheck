@@ -108,7 +108,7 @@ public class FirstActivity extends Activity {
 
 		case 2:
 			getSharedPreferences(LoginActivity.PREFS_NAME, MODE_PRIVATE).edit()
-					.putString(LoginActivity.PREF_USER, null).commit();
+					.putString(LoginActivity.PREF_ID, null).commit();
 			onResume();
 			return true;
 		}
@@ -121,7 +121,7 @@ public class FirstActivity extends Activity {
 
 		SharedPreferences pref = getSharedPreferences(LoginActivity.PREFS_NAME,
 				MODE_PRIVATE);
-		String username = pref.getString(LoginActivity.PREF_USER, null);
+		String username = pref.getString(LoginActivity.PREF_ID, null);
 
 		if (username == null) {
 			Intent i = new Intent(getApplicationContext(), LoginActivity.class);

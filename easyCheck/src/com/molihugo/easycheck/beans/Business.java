@@ -1,4 +1,4 @@
-package com.molihugo.easycheck.utils;
+package com.molihugo.easycheck.beans;
 
 import java.io.Serializable;
 import java.util.ArrayList;

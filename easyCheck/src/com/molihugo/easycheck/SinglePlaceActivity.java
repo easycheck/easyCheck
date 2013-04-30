@@ -12,8 +12,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.easycheck.R;
+import com.molihugo.easycheck.beans.Business;
 import com.molihugo.easycheck.utils.AlertDialogManager;
-import com.molihugo.easycheck.utils.Business;
 import com.molihugo.easycheck.utils.ConnectionDetector;
 
 public class SinglePlaceActivity extends Activity {

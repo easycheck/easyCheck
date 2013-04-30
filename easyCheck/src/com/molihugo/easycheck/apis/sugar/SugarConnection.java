@@ -5,12 +5,18 @@ import java.io.InputStreamReader;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -27,11 +33,6 @@ import com.google.gson.JsonSyntaxException;
 
 
 public class SugarConnection {
-
-	//import org.json.simple.JSONObject;
-	//import org.json.simple.JSONValue;
-	//import org.apache.http.entity.mime.MultipartEntity;
-	//import org.apache.http.entity.mime.content.StringBody;
 	/**
      * Log the user into the application
      *
@@ -257,7 +258,6 @@ public class SugarConnection {
 			   multipartEntity.addPart("response_type", new StringBody(Constantes.JSON));
 			   multipartEntity.addPart("rest_data",
 			       new StringBody(JSONObject.toJSONString(request)));
-			   System.out.println(JSONObject.toJSONString(request));
 			   // yourSugarCRM has to be changed to your SugarCRM instance
 			   // something like localhost/sugarcrm
 			   
@@ -408,7 +408,7 @@ public class SugarConnection {
 				e.printStackTrace();
 			}
 			
-			return response;
+			return ids.getIds().get(0);
 			
 	 }
 	 
@@ -471,13 +471,10 @@ public class SugarConnection {
 				company = setRelationship(session, "Marke_Sale", ids.getIds().get(0), "marke_sale_marke_company", related_idsCompany, name_value_list, 0);
 				contact = setRelationship(session, "Marke_Sale", ids.getIds().get(0), "marke_sale_marke_contact", related_idsContact, name_value_list, 0);
 			} catch (NoSuchAlgorithmException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (ClientProtocolException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			response.add(company);
@@ -573,7 +570,16 @@ public class SugarConnection {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		 return response;
+		 Gson mGson = new Gson();
+		 ResponseCompanyID responseCompanyID = new ResponseCompanyID();
+		 
+		 try{
+			 responseCompanyID = mGson.fromJson(response, ResponseCompanyID.class);
+		 }
+		 catch (JsonSyntaxException e) {
+		    	e.printStackTrace();
+		    }
+		 return responseCompanyID.getEntry_list().get(0).getId();
 	 }
 	 
 	 public static List<HashMap<String, String>> getContacts(String session, String idCompany){
@@ -583,12 +589,11 @@ public class SugarConnection {
 		 
 		 try {
 			response = getRelationships(session, "Marke_Company", idCompany,"marke_contact_marke_company", "", 1,"");
+		} catch (IOException e) {
+			e.printStackTrace();
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		}
-		 catch (IOException e) {
-				e.printStackTrace();
-			}
 		 Gson mGson = new Gson();
 		 Response contactsList = new Response();
 		 
@@ -641,6 +646,63 @@ public class SugarConnection {
 		 return salesList;
 		 
 	 }
+	 
+	 public static TreeMap<String,Long> getStatics(String fechaIni, String fechaFin){
+		 HashMap<String, Long> clasificacion = new HashMap<String,Long>();
+			
+			try {
+				Class.forName("com.mysql.jdbc.Driver");
+				Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sugarcrm", "root", "root");
+				Statement st = con.createStatement();
+				StringBuilder sql = new StringBuilder();
+				sql.append("select distinct t1.name");
+				sql.append(" from marke_sale t2");
+				sql.append("inner join marke_sale_marke_contact_c t on (t.marke_sale_marke_contactmarke_sale_idb=t2.id)");
+				sql.append("inner join marke_contact t1 on (t.marke_sale_marke_contactmarke_contact_ida=t1.id);");
+				ResultSet rs = st.executeQuery(sql.toString());
+				
+				while (rs.next())
+				{
+					
+					String name = (String) rs.getObject("name");
+					
+					Statement st2 = con.createStatement();
+					StringBuilder sql2 = new StringBuilder();
+					sql2.append("select count(*)");
+					sql2.append(" from marke_sale t2");
+					sql2.append(" inner join marke_sale_marke_contact_c t on (t.marke_sale_marke_contactmarke_sale_idb=t2.id)");
+					sql2.append(" inner join marke_contact t1 on (t.marke_sale_marke_contactmarke_contact_ida=t1.id);");
+					sql2.append(" where t1.name='");
+					sql2.append(name);
+					sql2.append("'");
+					sql2.append(" and");
+					sql2.append(" t2.date_entered>='");
+					sql2.append(fechaIni);
+					sql2.append("' and t2.date_entered<='");
+					sql2.append(fechaFin);
+					sql2.append("'");
+					ResultSet rs2 = st2.executeQuery(sql2.toString());
+					while (rs2.next()){
+						Long count = (Long) rs2.getObject("count(*)");
+						clasificacion.put(name, count);
+					}
+					rs2.close();
+					st2.close();
+				}
+				rs.close();
+				st.close();
+				
+			} catch (ClassNotFoundException e1) {
+				e1.printStackTrace();
+			}   catch (SQLException e) {
+				e.printStackTrace();
+			}
+			ValueComparator bvc =  new ValueComparator(clasificacion);
+	        TreeMap<String,Long> sorted_map = new TreeMap<String,Long>(bvc);
+	        sorted_map.putAll(clasificacion);
+	        return sorted_map;
+	 }
+	 
 
 }
 

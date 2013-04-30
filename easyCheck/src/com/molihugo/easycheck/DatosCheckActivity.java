@@ -5,102 +5,115 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.example.easycheck.R;
-import com.molihugo.easycheck.utils.Business;
-import com.molihugo.easycheck.utils.CheckDAO;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.Html;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListAdapter;
-import android.widget.SimpleAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.example.easycheck.R;
+import com.molihugo.easycheck.apis.sugar.SugarConnection;
+import com.molihugo.easycheck.beans.Business;
+import com.molihugo.easycheck.beans.Contacto;
+import com.molihugo.easycheck.utils.CheckDAO;
+
 public class DatosCheckActivity extends Activity {
+
+	private String sugarComId;
+
+	private ProgressDialog pDialog2;
+	private ProgressDialog pDialog;
 
 	private Button btnConfirmar, btnNuevoContacto;
 	private CheckDAO dao;
 
-	Business bu;
+	private Business bu;
 	private List<HashMap<String, String>> placesListItems = new ArrayList<HashMap<String, String>>();
+
+	private EditText descriptor, cantidad, fechaCierre;
+	private String id;
+
+	private Contacto contacto;
+
+	private Spinner sp;
+	private LinkedList<String> tipos;
+	ArrayAdapter<String> spinner_adapter;
+	
+	private Spinner sp2;
+	private LinkedList<String> tipos2;
+	ArrayAdapter<String> spinner_adapter2;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_datoscheck);
+
 		dao = new CheckDAO(this);
+
+		SharedPreferences pref = getSharedPreferences(LoginActivity.PREFS_NAME,
+				MODE_PRIVATE);
+		id = pref.getString(LoginActivity.PREF_ID, null);
+
+		if (id == null) {
+			this.finish();
+		}
+
+		descriptor = (EditText) findViewById(R.id.editText1);
+		cantidad = (EditText) findViewById(R.id.editText2);
+		fechaCierre = (EditText) findViewById(R.id.editText3);
 
 		Intent i = getIntent();
 		bu = (Business) i.getSerializableExtra("business");
 
-		Spinner sp = (Spinner) findViewById(R.id.spinner1);
-		// Creamos la lista
-		LinkedList<String> estados = new LinkedList<String>();
-		// La poblamos con los estados
-		estados.add("Check-in");
-		estados.add("Presupuesto");
-		estados.add("Pre-Acuerdo");
-		estados.add("Venta Cerrada");
-		// Creamos el adaptador
-		ArrayAdapter<String> spinner_adapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_spinner_item, estados);
-		// Añadimos el layout para el menú y se lo damos al spinner
-		spinner_adapter
-				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		sp.setAdapter(spinner_adapter);
-
-		sp = (Spinner) findViewById(R.id.spinner2);
-
-		estados = new LinkedList<String>();
-		// La poblamos con los estados
-		estados.add("Manolito gafotas");
-		estados.add("Molino");
-		estados.add("Antonio");
-		estados.add("Ion Jauregui");
-		// Creamos el adaptador
+		// spinner con tipos de Visita
+		sp = (Spinner) findViewById(R.id.spinner1);
+		tipos = new LinkedList<String>();
+		tipos.add("Check-in");
+		tipos.add("Presupuesto");
+		tipos.add("Pre-Acuerdo");
+		tipos.add("Venta Cerrada");
 		spinner_adapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_spinner_item, estados);
-		// Añadimos el layout para el menú y se lo damos al spinner
+				android.R.layout.simple_spinner_item, tipos);
 		spinner_adapter
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		sp.setAdapter(spinner_adapter);
 
-		sp.setAdapter(new SimpleAdapter(DatosCheckActivity.this,
-				placesListItems, R.layout.list_item, new String[] { "id",
-						"name" }, new int[] { R.id.reference, R.id.name }));
+		// spinner con contactos
+		sp2 = (Spinner) findViewById(R.id.spinner2);
 
+		new LoadContacts().execute();
+
+		// botón para un nuevo contacto
 		btnNuevoContacto = (Button) findViewById(R.id.button2);
-
-		/** Button check click event for showing the business around you */
 		btnNuevoContacto.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
-				int in = 0;
+				int in = 1;
 				Intent i = new Intent(getApplicationContext(),
 						NuevoContactoActivity.class);
-				startActivityForResult(i,in);
+				startActivityForResult(i, in);
 			}
 		});
 
-		/** button check **/
+		// botón para confirmar visita y volver a FirstActivity
 		btnConfirmar = (Button) findViewById(R.id.button3);
-
-		/** Button check click event for showing the business around you */
 		btnConfirmar.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
 
 				dao.insert(bu);
+				new DataTransaction().execute();
 				Intent i = new Intent(getApplicationContext(),
 						FirstActivity.class);
 				i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -109,23 +122,21 @@ public class DatosCheckActivity extends Activity {
 		});
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.datos_check, menu);
-		return true;
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+		if (requestCode == 1) {
+
+			if (resultCode == RESULT_OK) {
+				contacto = (Contacto) data.getSerializableExtra("result");
+			}
+			if (resultCode == RESULT_CANCELED) {
+				// Write your code if there's no result
+			}
+		}
 	}
 
-	/**
-	 * Background Async Task to Load Google places
-	 * */
-	class LoadPlaces extends AsyncTask<String, String, String> {
+	class LoadContacts extends AsyncTask<String, String, String> {
 
-		private ProgressDialog pDialog;
-
-		/**
-		 * Before starting background thread Show Progress Dialog
-		 * */
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
@@ -138,14 +149,23 @@ public class DatosCheckActivity extends Activity {
 			pDialog.show();
 		}
 
-		/**
-		 * getting Places JSON
-		 * */
 		protected String doInBackground(String... args) {
 
 			try {
 
-				// LLAMADA A
+				// LLAMADA A SUGAR
+
+				sugarComId = SugarConnection.getCompanyId(bu.getName(), id);
+				if (sugarComId == null) {
+					sugarComId = SugarConnection
+							.newCompany(id, bu.getName(), null,
+									bu.getAddress(), bu.getPhoneNumber(), bu
+											.getEmail(), null, null, bu
+											.getTypes().toString());
+				}
+
+				placesListItems = SugarConnection.getContacts(id, sugarComId);
+				
 
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -154,42 +174,84 @@ public class DatosCheckActivity extends Activity {
 			return null;
 		}
 
-		/**
-		 * After completing background task Dismiss the progress dialog and show
-		 * the data in UI Always use runOnUiThread(new Runnable()) to update UI
-		 * from background thread, otherwise you will get error
-		 * **/
 		protected void onPostExecute(String file_url) {
-			// dismiss the dialog after getting all products
+
 			pDialog.dismiss();
-			// updating UI from Background Thread
 			runOnUiThread(new Runnable() {
 				public void run() {
 
-					/*
-					 * // Updating parsed Places into LISTVIEW if
-					 * (!negocios.isEmpty()) { // loop through each place for
-					 * (Business b : negocios) { HashMap<String, String> map =
-					 * new HashMap<String, String>();
-					 * 
-					 * // Place reference won't display in listview - // it will
-					 * be hidden // Place reference is used to get //
-					 * "place full details" map.put(KEY_REFERENCE,
-					 * b.getReference()); // Place name map.put(KEY_NAME,
-					 * b.getName());
-					 * 
-					 * // adding HashMap to ArrayList placesListItems.add(map);
-					 * } // list adapter ListAdapter adapter = new
-					 * SimpleAdapter( MainActivity.this, placesListItems,
-					 * R.layout.list_item, new String[] { KEY_REFERENCE,
-					 * KEY_NAME }, new int[] { R.id.reference, R.id.name });
-					 * 
-					 * // Adding data into listview lv.setAdapter(adapter); }
-					 * else { // Zero results found alert.showAlertDialog(
-					 * MainActivity.this, "Near Places",
-					 * "Sorry no places found. Try to change the types of places"
-					 * , false); }
-					 */}
+					tipos2 = new LinkedList<String>();
+					
+
+					if (!placesListItems.isEmpty()) {
+						tipos2.add(placesListItems.get(0).get("name").toString());
+						tipos2.add("Manolito gafotas");
+					} else {
+						tipos2.add("Manolito gafotas");
+						tipos2.add("Molino");
+						tipos2.add("Antonio");
+						tipos2.add("Ion Jauregui");
+					}
+
+					// Log.d("ID", com);
+					Log.d("CONTAAAAAACTS", placesListItems.get(0).get("name"));
+					
+					spinner_adapter2 = new ArrayAdapter<String>(DatosCheckActivity.this,
+							android.R.layout.simple_spinner_item, tipos2);
+					spinner_adapter2
+							.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+					sp2.setAdapter(spinner_adapter2);
+				}
+
+			});
+
+		}
+	}
+
+	class DataTransaction extends AsyncTask<String, String, String> {
+
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			/*
+			 * pDialog2 = new ProgressDialog(DatosCheckActivity.this);
+			 * 
+			 * pDialog2.setMessage(Html
+			 * .fromHtml("<b>Busqueda</b><br/>Conectando con Sugar..."));
+			 * pDialog2.setIndeterminate(false); pDialog2.setCancelable(false);
+			 * pDialog2.show();
+			 */}
+
+		protected String doInBackground(String... args) {
+
+			try {
+
+				// LLAMADA A SUGAR
+				
+				String con = SugarConnection.newContact(id,
+						contacto.getNombre(), contacto.getTelefono(),
+						contacto.getMail(), contacto.getPosicion(), sugarComId);
+				Log.d("CONIDDDDD", con);
+				SugarConnection.newSale(id,  ((Editable)descriptor.getText()).toString(),
+						 "fecha", "tipo tipo",
+						 "100", sugarComId, con);
+				Log.d("COMIDDDDDDD", sugarComId);
+				
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				Log.d("AAAAAAAAAAAAAAA", e.getMessage());
+			}
+			return null;
+		}
+
+		protected void onPostExecute(String file_url) {
+
+			// pDialog2.dismiss();
+			runOnUiThread(new Runnable() {
+				public void run() {
+
+				}
 
 			});
 

@@ -34,7 +34,7 @@ import com.molihugo.easycheck.utils.ConnectionDetector;
 public class LoginActivity extends Activity {
 
 	public static final String PREFS_NAME = "EasyCheckPrefs";
-	public static final String PREF_USER = "username";
+	public static final String PREF_ID = "id";
 
 	/**
 	 * Keep track of the login task to ensure we can cancel it if requested.
@@ -241,7 +241,7 @@ public class LoginActivity extends Activity {
 
 			if (success) {
 				getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit()
-						.putString(PREF_USER, mEmail).commit();
+					.putString(PREF_ID, id).commit();
 				Intent i = new Intent(getApplicationContext(),
 						FirstActivity.class);
 				i.putExtra("idUser", id);

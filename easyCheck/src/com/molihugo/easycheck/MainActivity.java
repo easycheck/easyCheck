@@ -32,8 +32,8 @@ import com.molihugo.easycheck.apis.googleplaces.SearchPlaceResults;
 import com.molihugo.easycheck.apis.yelp.BusinessDetail;
 import com.molihugo.easycheck.apis.yelp.BusinessListBean;
 import com.molihugo.easycheck.apis.yelp.YelpConnector;
+import com.molihugo.easycheck.beans.Business;
 import com.molihugo.easycheck.utils.AlertDialogManager;
-import com.molihugo.easycheck.utils.Business;
 import fi.foyt.foursquare.api.Result;
 import fi.foyt.foursquare.api.entities.CompactVenue;
 import fi.foyt.foursquare.api.entities.VenuesSearchResult;
@@ -41,26 +41,24 @@ import fi.foyt.foursquare.api.entities.VenuesSearchResult;
 public class MainActivity extends Activity {
 
 	private LocationManager locationManager;
+	private MyLocationListener listener;
 
-	private static double lon = 0, lat;
-
-	AlertDialogManager alert = new AlertDialogManager();
-	SearchPlaceResult nearPlaces;
-	ArrayList<Business> negocios;
-	Button btnShowOnMap;
-	ProgressDialog pDialog;
-	ListView lv;
-	ArrayList<HashMap<String, String>> placesListItems = new ArrayList<HashMap<String, String>>();
+	private AlertDialogManager alert = new AlertDialogManager();
+	private SearchPlaceResult nearPlaces;
+	private ArrayList<Business> negocios;
+	private Button btnShowOnMap;
+	private ProgressDialog pDialog;
+	private ListView lv;
+	private ArrayList<HashMap<String, String>> placesListItems = new ArrayList<HashMap<String, String>>();
 
 	// KEY Strings
 	public static String KEY_REFERENCE = "reference"; // id of the place
 	public static String KEY_NAME = "name"; // name of the place
-	public static String KEY_VICINITY = "vicinity"; // Place area name
 
-	int fondo;
-	boolean apis[] = new boolean[3];
+	private static double lon = 0, lat;
 
-	MyLocationListener listener;
+	private int fondo;
+	private boolean apis[] = new boolean[3];
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -227,6 +225,7 @@ public class MainActivity extends Activity {
 				;
 
 				Log.d("AAAAAAAAAAAAAAA", lat + "-lat & long-" + lon);
+				negocios = new ArrayList<Business>();
 
 				// FROM GOOGLE PLACES
 				if (apis[0]) {
@@ -238,7 +237,6 @@ public class MainActivity extends Activity {
 							+ nearPlaces.getResults().size());
 
 					String status = nearPlaces.getStatus();
-					negocios = new ArrayList<Business>();
 
 					// Check for all possible status
 					if (status.equals("OK")) {
