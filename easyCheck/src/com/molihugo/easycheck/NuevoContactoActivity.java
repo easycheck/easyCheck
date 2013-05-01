@@ -28,7 +28,7 @@ public class NuevoContactoActivity extends Activity {
 		btnGuardar = (Button) findViewById(R.id.button3);
 		
 		nombre = (EditText) findViewById(R.id.editText1);
-		telefono = (EditText) findViewById(R.id.editText2);
+		telefono = (EditText) findViewById(R.id.editText5);
 		mail = (EditText) findViewById(R.id.editText3);
 		posicion = (EditText) findViewById(R.id.editText4);
 

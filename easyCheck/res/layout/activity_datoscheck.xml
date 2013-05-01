@@ -21,13 +21,13 @@
         android:prompt="@string/spin_estado" />
 
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/editText5"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Cantidad" />
 
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/editText6"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Fecha de Cierre" />

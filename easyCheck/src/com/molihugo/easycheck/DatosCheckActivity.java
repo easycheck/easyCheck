@@ -27,11 +27,14 @@ import com.example.easycheck.R;
 import com.molihugo.easycheck.apis.sugar.SugarConnection;
 import com.molihugo.easycheck.beans.Business;
 import com.molihugo.easycheck.beans.Contacto;
+import com.molihugo.easycheck.utils.AlertDialogManager;
 import com.molihugo.easycheck.utils.CheckDAO;
 
 public class DatosCheckActivity extends Activity {
 
 	private String sugarComId;
+	
+	private AlertDialogManager alert = new AlertDialogManager();
 
 	private ProgressDialog pDialog2;
 	private ProgressDialog pDialog;
@@ -58,7 +61,7 @@ public class DatosCheckActivity extends Activity {
 	
 	private String selectedType;
 	
-	private Boolean nuevoContacto;
+	private boolean nuevoContacto = false;
 	
 	private String conId;
 
@@ -78,8 +81,8 @@ public class DatosCheckActivity extends Activity {
 		}
 
 		descriptor = (EditText) findViewById(R.id.editText1);
-		cantidad = (EditText) findViewById(R.id.editText2);
-		fechaCierre = (EditText) findViewById(R.id.editText3);
+		cantidad = (EditText) findViewById(R.id.editText5);
+		fechaCierre = (EditText) findViewById(R.id.editText6);
 
 		Intent i = getIntent();
 		bu = (Business) i.getSerializableExtra("business");
@@ -107,7 +110,14 @@ public class DatosCheckActivity extends Activity {
 		    @Override
 		    public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
 		    	
-		    	selectedType = tipos.get(position+1);
+		    	if (position != 0){
+
+			    	selectedType = tipos.get(position);
+			    	Log.d("---TYPEEEE---", selectedType);
+		    	}else{
+		    		selectedType = null;
+		    	}
+		    	
 		    	
 		    }
 
@@ -121,8 +131,12 @@ public class DatosCheckActivity extends Activity {
 		sp2.setOnItemSelectedListener(new OnItemSelectedListener(){
 		    @Override
 		    public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-		    	if (placesListItems.size()!=0){
-		    		conId = placesListItems.get(position+1).get("id");
+		    	if (placesListItems.size()!=0 && position!=0){
+		    		conId = placesListItems.get(position-1).get("id");
+		    		Log.d("---CONID---", conId);
+		    	}
+		    	if (!nuevoContacto && position==0){
+		    		conId=null;
 		    	}
 		    }
 
@@ -157,11 +171,21 @@ public class DatosCheckActivity extends Activity {
 			public void onClick(View arg0) {
 
 				dao.insert(bu);
-				new DataTransaction().execute();
+				if (conId==null && !nuevoContacto){
+					alert.showAlertDialog(DatosCheckActivity.this,"Error", "No se ha seleccionado contacto", false);
+				}
+				else if (selectedType==null){
+					alert.showAlertDialog(DatosCheckActivity.this,"Error", "No se ha seleccionado tipo visita", false);
+				}
+				else {
+					new DataTransaction().execute();
 				Intent i = new Intent(getApplicationContext(),
 						FirstActivity.class);
 				i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				startActivity(i);
+				}
+					
+				
 			}
 		});
 	}
@@ -173,11 +197,28 @@ public class DatosCheckActivity extends Activity {
 			if (resultCode == RESULT_OK) {
 				contacto = (Contacto) data.getSerializableExtra("result");
 				nuevoContacto = true;
+				tipos2 = new LinkedList<String>();
+				tipos2.add(contacto.getNombre());
+				sp2.setClickable(false);
 			}
 			if (resultCode == RESULT_CANCELED) {
 				// Write your code if there's no result
 			}
 		}
+	}
+
+	@Override
+	protected void onResume() {
+		
+		super.onResume();
+		if (nuevoContacto){
+			spinner_adapter2 = new ArrayAdapter<String>(DatosCheckActivity.this,
+				android.R.layout.simple_spinner_item, tipos2);
+		spinner_adapter2
+				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		sp2.setAdapter(spinner_adapter2);
+		}
+		
 	}
 
 	class LoadContacts extends AsyncTask<String, String, String> {
@@ -201,7 +242,7 @@ public class DatosCheckActivity extends Activity {
 				// LLAMADA A SUGAR
 
 				sugarComId = SugarConnection.getCompanyId(bu.getName(), id);
-				if (sugarComId == null) {
+				if (sugarComId.equals("")) {
 					sugarComId = SugarConnection
 							.newCompany(id, bu.getName(), null,
 									bu.getAddress(), bu.getPhoneNumber(), bu
@@ -243,12 +284,12 @@ public class DatosCheckActivity extends Activity {
 
 					// Log.d("ID", com);
 					//Log.d("CONTAAAAAACTS", placesListItems.get(0).get("name"));
-					
 					spinner_adapter2 = new ArrayAdapter<String>(DatosCheckActivity.this,
 							android.R.layout.simple_spinner_item, tipos2);
 					spinner_adapter2
 							.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 					sp2.setAdapter(spinner_adapter2);
+					
 				}
 
 			});
@@ -280,12 +321,19 @@ public class DatosCheckActivity extends Activity {
 							contacto.getNombre(), contacto.getTelefono(),
 							contacto.getMail(), contacto.getPosicion(), sugarComId);
 				}
+
 				
 				Log.d("CONIDDDDD", conId);
-				SugarConnection.newSale(id,  ((Editable)descriptor.getText()).toString(),
-						 "fecha", "tipo tipo",
-						 "100", sugarComId, conId);
 				Log.d("COMIDDDDDDD", sugarComId);
+				Log.d("COMIDDDDDDD", selectedType);
+				Log.d("DESCRIPCION", ((Editable)descriptor.getText()).toString());
+				Log.d("FECHA", ((Editable)fechaCierre.getText()).toString());
+				
+				Log.d("Cantidad",((Editable)cantidad.getText()).toString());
+				SugarConnection.newSale(id,  ((Editable)descriptor.getText()).toString(),
+						((Editable)fechaCierre.getText()).toString(), selectedType ,
+						((Editable)cantidad.getText()).toString(), sugarComId, conId);
+				
 				
 
 			} catch (Exception e) {
