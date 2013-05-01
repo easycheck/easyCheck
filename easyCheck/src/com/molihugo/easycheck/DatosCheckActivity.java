@@ -2,6 +2,7 @@ package com.molihugo.easycheck;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,6 +16,8 @@ import android.text.Editable;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -51,6 +54,13 @@ public class DatosCheckActivity extends Activity {
 	private Spinner sp2;
 	private LinkedList<String> tipos2;
 	ArrayAdapter<String> spinner_adapter2;
+	
+	
+	private String selectedType;
+	
+	private Boolean nuevoContacto;
+	
+	private String conId;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +87,7 @@ public class DatosCheckActivity extends Activity {
 		// spinner con tipos de Visita
 		sp = (Spinner) findViewById(R.id.spinner1);
 		tipos = new LinkedList<String>();
+		tipos.add("Seleccione tipo visita");
 		tipos.add("Check-in");
 		tipos.add("Presupuesto");
 		tipos.add("Pre-Acuerdo");
@@ -89,8 +100,39 @@ public class DatosCheckActivity extends Activity {
 
 		// spinner con contactos
 		sp2 = (Spinner) findViewById(R.id.spinner2);
-
+		
 		new LoadContacts().execute();
+		
+		sp.setOnItemSelectedListener(new OnItemSelectedListener(){
+		    @Override
+		    public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+		    	
+		    	selectedType = tipos.get(position+1);
+		    	
+		    }
+
+		    @Override
+		    public void onNothingSelected(AdapterView<?> parentView) {
+		        // your code here
+		    }
+
+		});
+		
+		sp2.setOnItemSelectedListener(new OnItemSelectedListener(){
+		    @Override
+		    public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+		        conId = placesListItems.get(position+1).get("id");
+		    }
+
+		    @Override
+		    public void onNothingSelected(AdapterView<?> parentView) {
+		        // your code here
+		    }
+
+		});
+		
+
+		
 
 		// botón para un nuevo contacto
 		btnNuevoContacto = (Button) findViewById(R.id.button2);
@@ -128,6 +170,7 @@ public class DatosCheckActivity extends Activity {
 
 			if (resultCode == RESULT_OK) {
 				contacto = (Contacto) data.getSerializableExtra("result");
+				nuevoContacto = true;
 			}
 			if (resultCode == RESULT_CANCELED) {
 				// Write your code if there's no result
@@ -182,19 +225,22 @@ public class DatosCheckActivity extends Activity {
 
 					tipos2 = new LinkedList<String>();
 					
-
 					if (!placesListItems.isEmpty()) {
-						tipos2.add(placesListItems.get(0).get("name").toString());
-						tipos2.add("Manolito gafotas");
+						tipos2.add("Seleccione un contacto");
+						for (Iterator<HashMap<String,String>> iterator = placesListItems.iterator(); iterator
+								.hasNext();) {
+							HashMap<String,String> type = iterator.next();
+							tipos2.add(type.get("name").toString());
+					
+						}
+						
+						
 					} else {
-						tipos2.add("Manolito gafotas");
-						tipos2.add("Molino");
-						tipos2.add("Antonio");
-						tipos2.add("Ion Jauregui");
+						tipos2.add("Ningun contacto para esta empresa");
 					}
 
 					// Log.d("ID", com);
-					Log.d("CONTAAAAAACTS", placesListItems.get(0).get("name"));
+					//Log.d("CONTAAAAAACTS", placesListItems.get(0).get("name"));
 					
 					spinner_adapter2 = new ArrayAdapter<String>(DatosCheckActivity.this,
 							android.R.layout.simple_spinner_item, tipos2);
@@ -227,14 +273,16 @@ public class DatosCheckActivity extends Activity {
 			try {
 
 				// LLAMADA A SUGAR
+				if (nuevoContacto){
+					conId = SugarConnection.newContact(id,
+							contacto.getNombre(), contacto.getTelefono(),
+							contacto.getMail(), contacto.getPosicion(), sugarComId);
+				}
 				
-				String con = SugarConnection.newContact(id,
-						contacto.getNombre(), contacto.getTelefono(),
-						contacto.getMail(), contacto.getPosicion(), sugarComId);
-				Log.d("CONIDDDDD", con);
+				Log.d("CONIDDDDD", conId);
 				SugarConnection.newSale(id,  ((Editable)descriptor.getText()).toString(),
 						 "fecha", "tipo tipo",
-						 "100", sugarComId, con);
+						 "100", sugarComId, conId);
 				Log.d("COMIDDDDDDD", sugarComId);
 				
 
