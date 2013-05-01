@@ -579,7 +579,11 @@ public class SugarConnection {
 		 catch (JsonSyntaxException e) {
 		    	e.printStackTrace();
 		    }
-		 return responseCompanyID.getEntry_list().get(0).getId();
+		 if (!responseCompanyID.getEntry_list().isEmpty()){
+
+			 return responseCompanyID.getEntry_list().get(0).getId();
+		 }
+		 return "";
 	 }
 	 
 	 public static List<HashMap<String, String>> getContacts(String session, String idCompany){
