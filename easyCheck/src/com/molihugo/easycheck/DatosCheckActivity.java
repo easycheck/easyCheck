@@ -121,7 +121,9 @@ public class DatosCheckActivity extends Activity {
 		sp2.setOnItemSelectedListener(new OnItemSelectedListener(){
 		    @Override
 		    public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-		        conId = placesListItems.get(position+1).get("id");
+		    	if (placesListItems.size()!=0){
+		    		conId = placesListItems.get(position+1).get("id");
+		    	}
 		    }
 
 		    @Override
