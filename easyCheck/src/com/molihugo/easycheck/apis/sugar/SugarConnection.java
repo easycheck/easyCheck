@@ -413,7 +413,7 @@ public class SugarConnection {
 	 }
 	 
 	 public static List<String> newSale(String session,String name, 
-			 String description, String type,String ammount,String companyId, String contactId){
+			 String description, String type,String ammount,String companyId, String contactId,String userId){
 		 List<List<Map<String, String>>> name_value_lists = new ArrayList<List<Map<String, String>>>();
 			List<Map<String, String>> objeto =  new ArrayList<Map<String, String>>();
 			Map<String, String> atributo1 = new LinkedHashMap<String, String>();
@@ -455,6 +455,7 @@ public class SugarConnection {
 			List<String> response = new ArrayList<String>();
 			String company = "";
 			String contact = "";
+			String user = "";
 			//No se para que se pone
 			//EMPIEZA
 			List<Map<String, String>> name_value_list =  new ArrayList<Map<String, String>>();
@@ -467,9 +468,12 @@ public class SugarConnection {
 			related_idsCompany.add(companyId);
 			ArrayList<String> related_idsContact = new ArrayList<String>();
 			related_idsContact.add(contactId);
+			ArrayList<String> related_idsUser = new ArrayList<String>();
+			related_idsContact.add(userId);
 			try {
 				company = setRelationship(session, "Marke_Sale", ids.getIds().get(0), "marke_sale_marke_company", related_idsCompany, name_value_list, 0);
 				contact = setRelationship(session, "Marke_Sale", ids.getIds().get(0), "marke_sale_marke_contact", related_idsContact, name_value_list, 0);
+				user = setRelationship(session, "Marke_Sale", ids.getIds().get(0), "marke_sale_users", related_idsUser, name_value_list, 0);
 			} catch (NoSuchAlgorithmException e) {
 				e.printStackTrace();
 			} catch (ClientProtocolException e) {
@@ -479,6 +483,7 @@ public class SugarConnection {
 			}
 			response.add(company);
 			response.add(contact);
+			response.add(user);
 			return response;
 			
 			
@@ -629,7 +634,7 @@ public class SugarConnection {
 		
 		
 		 try {
-			response =getRelationships(session, "Marke_Contact", idUsuario,"marke_sale_marke_contact", qry, 1,"");
+			response =getRelationships(session, "Users", idUsuario,"marke_sale_users", qry, 1,"");
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		} catch (ClientProtocolException e) {
