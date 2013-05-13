@@ -10,7 +10,9 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -27,6 +29,10 @@ import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
+
+
+import android.annotation.SuppressLint;
+import android.text.format.DateFormat;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -396,10 +402,9 @@ public class SugarConnection {
 			ArrayList<String> related_ids = new ArrayList<String>();
 			related_ids.add(companyId);
 			
-			String response = "";
 			
 			try {
-				response = setRelationship(session, "Marke_Contact", ids.getIds().get(0), "marke_contact_marke_company", related_ids, name_value_list, 0);
+				setRelationship(session, "Marke_Contact", ids.getIds().get(0), "marke_contact_marke_company", related_ids, name_value_list, 0);
 			} catch (NoSuchAlgorithmException e) {
 				e.printStackTrace();
 			} catch (ClientProtocolException e) {
@@ -411,15 +416,30 @@ public class SugarConnection {
 			return ids.getIds().get(0);
 			
 	 }
-	 
+	 /**
+	  * Creates a new sale
+	  *
+	  * @param String  session -- Session ID returned by a previous call to login.
+	  * @param String  name -- Name of the sale
+	  * @param String  description -- A description of the sale
+	  * @param String type -- The type of the sale
+	  * @param String ammount -- The ammount of the sale
+	  * @param String created -- When it was created the sale (YYYY-MM-DD)
+	  * @param String companyId -- The company id which is related the sale
+	  * @param String contactId -- The contact id which is related the sale
+	  * @param String comercialId -- The comercial how did the sale
+	  * @return List<String> - A list of created / modified / deleted
+	  */
 	 public static List<String> newSale(String session,String name, 
-			 String description, String type,String ammount,String companyId, String contactId,String userId){
+			 String description, String type,String ammount,String created,String companyId, String contactId,String comercialId){
 		 List<List<Map<String, String>>> name_value_lists = new ArrayList<List<Map<String, String>>>();
 			List<Map<String, String>> objeto =  new ArrayList<Map<String, String>>();
 			Map<String, String> atributo1 = new LinkedHashMap<String, String>();
 			Map<String, String> atributo2 = new LinkedHashMap<String, String>();
 			Map<String, String> atributo3 = new LinkedHashMap<String, String>();
 			Map<String, String> atributo4 = new LinkedHashMap<String, String>();
+			Map<String, String> atributo5 = new LinkedHashMap<String, String>();
+			Map<String, String> atributo6 = new LinkedHashMap<String, String>();
 			//Un hashmap por cada atributo 
 			atributo1.put("name", "name");
 			atributo1.put("value", name);
@@ -429,11 +449,17 @@ public class SugarConnection {
 			atributo3.put("value", type);
 			atributo4.put("name", "ammount");
 			atributo4.put("value", ammount);
+			atributo5.put("name","creado");
+			atributo5.put("value",created);
+			atributo6.put("name","comercial");
+			atributo6.put("value",comercialId);
 			//Un objeto por cada record
 			objeto.add(atributo1);
 			objeto.add(atributo2);
 			objeto.add(atributo3);
 			objeto.add(atributo4);
+			objeto.add(atributo5);
+			objeto.add(atributo6);
 			name_value_lists.add(objeto);
 			
 			Gson mGson = new Gson();
@@ -455,7 +481,6 @@ public class SugarConnection {
 			List<String> response = new ArrayList<String>();
 			String company = "";
 			String contact = "";
-			String user = "";
 			//No se para que se pone
 			//EMPIEZA
 			List<Map<String, String>> name_value_list =  new ArrayList<Map<String, String>>();
@@ -468,12 +493,10 @@ public class SugarConnection {
 			related_idsCompany.add(companyId);
 			ArrayList<String> related_idsContact = new ArrayList<String>();
 			related_idsContact.add(contactId);
-			ArrayList<String> related_idsUser = new ArrayList<String>();
-			related_idsContact.add(userId);
+			
 			try {
 				company = setRelationship(session, "Marke_Sale", ids.getIds().get(0), "marke_sale_marke_company", related_idsCompany, name_value_list, 0);
 				contact = setRelationship(session, "Marke_Sale", ids.getIds().get(0), "marke_sale_marke_contact", related_idsContact, name_value_list, 0);
-				user = setRelationship(session, "Marke_Sale", ids.getIds().get(0), "marke_sale_users", related_idsUser, name_value_list, 0);
 			} catch (NoSuchAlgorithmException e) {
 				e.printStackTrace();
 			} catch (ClientProtocolException e) {
@@ -483,7 +506,6 @@ public class SugarConnection {
 			}
 			response.add(company);
 			response.add(contact);
-			response.add(user);
 			return response;
 			
 			
@@ -626,15 +648,27 @@ public class SugarConnection {
 		 return contactos;
 	 }
 	 
-	 public static Response getRevision(String session, String fechaIni, String fechaFin,String idUsuario){
+	 
+	 /**
+	  * Gets all the sales related to a comercial
+	  *
+	  * @param String  session -- Session ID returned by a previous call to login.
+	  * @param String  fechaIni -- Name of the company (YYYY-MM-DD)
+	  * @param String  fechaFin -- The phone number of the company (YYYY-MM-DD)
+	  * @param String idUsuario -- The email of the company
+	  * @param Integer next_offset -- The fax of the company
+	  * @return List<SaleResponse> - A list of SaleResponse 
+	  * @exception 'SoapFault' -- The SOAP error, if any
+	  */
+	 public static List<SaleResponse> getRevision(String session, String fechaIni, String fechaFin,String idUsuario,Integer next_offset){
 
 		 String response = "";
 		 
-		String	qry = "date_entered >="+"'"+fechaIni+"'"+" and date_entered <="+"'"+fechaFin+"'";
+		String	qry = "creado >="+"'"+fechaIni+"'"+" and creado <="+"'"+fechaFin+"'"+" and comercial ="+"'"+idUsuario+"'";
 		
 		
 		 try {
-			response =getRelationships(session, "Users", idUsuario,"marke_sale_users", qry, 1,"");
+			response =getRecords(session,"Marke_Sale",qry,"",null,null,next_offset);
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		} catch (ClientProtocolException e) {
@@ -644,15 +678,57 @@ public class SugarConnection {
 		}
 		 
 		 Gson mGson = new Gson();
-		 Response salesList = new Response();
+		 DatosResponse salesList1 = new DatosResponse();
 		 
 		 try{
-			 salesList = mGson.fromJson(response, Response.class);
+			 salesList1 = mGson.fromJson(response, DatosResponse.class);
 		 }
 		 catch (JsonSyntaxException e) {
 		    	e.printStackTrace();
 		    }
-		 return salesList;
+		 List<SaleResponse> finalResponse = new ArrayList<SaleResponse>();
+		 String company ="";
+		 String contact="";
+		 for (Iterator<Sale> iterator = salesList1.getEntry_list().iterator(); iterator.hasNext();) {
+			Sale sale = iterator.next();
+			String id = sale.getId();
+			SaleResponse sr = new SaleResponse();
+			sr.setAmmount(sale.getName_value_list().getAmmount().get("value"));
+			sr.setDateCreated(sale.getName_value_list().getCreado().get("value"));
+			sr.setDescription(sale.getName_value_list().getDescription().get("value"));
+			sr.setSaleName(sale.getName_value_list().getName().get("value"));
+			sr.setType(sale.getName_value_list().getType().get("value"));
+			try {
+				company= getRelationships(session, "Marke_Sale", id, "marke_sale_marke_company","", 1, "");
+				contact= getRelationships(session, "Marke_Sale", id, "marke_sale_marke_contact","", 1, "");
+				Response companyResponse = new Response();
+				Response contactResponse = new Response();
+				companyResponse = mGson.fromJson(company, Response.class);
+				contactResponse = mGson.fromJson(contact, Response.class);
+
+				sr.setCompany(companyResponse.getEntry_list().get(0).getName_value_list().getName().getValue());
+				sr.setContact(contactResponse.getEntry_list().get(0).getName_value_list().getName().getValue());
+			
+				 
+			} catch (NoSuchAlgorithmException e) {
+				e.printStackTrace();
+			} catch (ClientProtocolException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			catch (JsonSyntaxException e) {
+		    	e.printStackTrace();
+		    }
+			finalResponse.add(sr);
+			
+			
+		}
+		 
+		 
+		
+		 
+		 return finalResponse;
 		 
 	 }
 	 
@@ -712,6 +788,18 @@ public class SugarConnection {
 	        return sorted_map;
 	 }
 	 
+	@SuppressLint("SimpleDateFormat")
+	/**
+	  * Formats a date into YYYY-MM-DD
+	  *
+	  * @param Date  date -- The date to be converted
+	  * @return String - The date in YYYY-MM-DD format 
+	  */
+	public static String getStringFromDate(Date date){
+		 
+		 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		 return dateFormat.format(date);
+	 }
 
 }
 
