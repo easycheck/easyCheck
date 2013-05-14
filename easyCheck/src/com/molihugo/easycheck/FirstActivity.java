@@ -34,28 +34,15 @@ public class FirstActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_first);
-		
-		PreferenceManager
-				.setDefaultValues(this, R.xml.opciones, false);
-
-		/** button check **/
-		btnCheck = (Button) findViewById(R.id.button3);
 
 		cd = new ConnectionDetector(getApplicationContext());
 
-		// Check if Internet present
-		isInternetPresent = cd.isConnectingToInternet();
-		if (!isInternetPresent) {
-			// Internet Connection is not present
-			alert.showAlertDialog(
-					FirstActivity.this,
-					"Error de conectividad",
-					"Por favor, revise su conexión de datos y vuelva a intentarlo",
-					false);
-			btnCheck.setEnabled(false);
-			return;
-		}
+		setContentView(R.layout.activity_first);
+
+		PreferenceManager.setDefaultValues(this, R.xml.opciones, false);
+
+		/** button check **/
+		btnCheck = (Button) findViewById(R.id.button3);
 
 		/** Button check click event for showing the business around you */
 		btnCheck.setOnClickListener(new View.OnClickListener() {
@@ -118,6 +105,19 @@ public class FirstActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+
+		// Check if Internet present
+		isInternetPresent = cd.isConnectingToInternet();
+		if (!isInternetPresent) {
+			// Internet Connection is not present
+			alert.showAlertDialog(
+					FirstActivity.this,
+					"Error de conectividad",
+					"Por favor, revise su conexión de datos y vuelva a intentarlo",
+					false);
+			btnCheck.setEnabled(false);
+			return;
+		}
 
 		SharedPreferences pref = getSharedPreferences(LoginActivity.PREFS_NAME,
 				MODE_PRIVATE);

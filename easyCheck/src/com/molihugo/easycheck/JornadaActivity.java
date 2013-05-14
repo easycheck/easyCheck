@@ -6,6 +6,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
 import com.example.easycheck.R;
+import com.molihugo.easycheck.apis.sugar.SugarConnection;
 import com.molihugo.easycheck.beans.Business;
 import com.molihugo.easycheck.utils.CheckDAO;
 
@@ -30,6 +32,9 @@ public class JornadaActivity extends Activity {
 
 	List<Business> lista;
 	
+	String id;
+	String username;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -40,6 +45,13 @@ public class JornadaActivity extends Activity {
 
 		// Getting listview
 		lv = (ListView) findViewById(R.id.listView1);
+		
+		SharedPreferences pref = getSharedPreferences(LoginActivity.PREFS_NAME,
+				MODE_PRIVATE);
+		username = pref.getString("nombre", null);
+		id = pref.getString(LoginActivity.PREF_ID, null);
+		
+		//SugarConnection.getRevision(id, "", "", username);
 
 		
 		
@@ -55,13 +67,6 @@ public class JornadaActivity extends Activity {
 		}
 		
 		
-		//hm.put("nombre", "hugo");
-		//hm.put("victorias", "2");
-
-		// adding HashMap to ArrayList
-		//rankingItems.add(hm);
-		
-		
 		// list adapter
 		ListAdapter adapter = new SimpleAdapter(
 				JornadaActivity.this, rankingItems,
@@ -71,9 +76,6 @@ public class JornadaActivity extends Activity {
 
 		// Adding data into listview
 		lv.setAdapter(adapter);
-		
-		//Toast.makeText(JornadaActivity.this, rankingItems.get(1).toString(), Toast.LENGTH_LONG)
-		//		.show();
 		
 		lv.setOnItemClickListener(new OnItemClickListener() {
 
@@ -100,15 +102,6 @@ public class JornadaActivity extends Activity {
 				startActivity(in);
 			}
 		});
-		
-		
-	}
-
-	@Override
-	public void onPause() {
-
-		//Log.d("HUGO ranking item 1", rankingItems.get(1).toString());
-		super.onPause();
 	}
 
 }

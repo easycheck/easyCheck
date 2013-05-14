@@ -242,6 +242,8 @@ public class LoginActivity extends Activity {
 			if (success) {
 				getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit()
 					.putString(PREF_ID, id).commit();
+				getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit()
+				.putString("nombre", mEmail).commit();
 				Intent i = new Intent(getApplicationContext(),
 						FirstActivity.class);
 				i.putExtra("idUser", id);

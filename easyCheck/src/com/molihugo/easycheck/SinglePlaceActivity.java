@@ -39,6 +39,8 @@ public class SinglePlaceActivity extends Activity {
 	
 	Business bu;
 
+	private Button btnMap;
+
 	// KEY Strings
 	public static String KEY_REFERENCE = "reference"; // id of the place
 	public static String KEY_NAME = "name";
@@ -104,6 +106,26 @@ public class SinglePlaceActivity extends Activity {
 				i.putExtra(KEY_REFERENCE, reference);
 				i.putExtra(KEY_NAME, name);
 				i.putExtra("business", bu);
+				startActivity(i);
+			}
+		});
+		
+		/** button seguir **/
+		btnMap = (Button) findViewById(R.id.button1);
+
+		/** Button seguir click event for continue with this business */
+		btnMap.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				Intent i = new Intent(getApplicationContext(),
+						PlacesMapActivity.class);
+
+				i.putExtra("user_latitude", Double.parseDouble(bu.getLat()));
+				i.putExtra("user_longitude",  Double.parseDouble(bu.getLon()));
+				// passing near places to map activity
+				i.putExtra("near_places", nearPlaces);
+				i.putExtra("ref", bu.getReference());
 				startActivity(i);
 			}
 		});

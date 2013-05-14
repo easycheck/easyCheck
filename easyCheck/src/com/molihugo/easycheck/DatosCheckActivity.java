@@ -29,6 +29,7 @@ import com.molihugo.easycheck.beans.Business;
 import com.molihugo.easycheck.beans.Contacto;
 import com.molihugo.easycheck.utils.AlertDialogManager;
 import com.molihugo.easycheck.utils.CheckDAO;
+import com.molihugo.easycheck.utils.Utils;
 
 public class DatosCheckActivity extends Activity {
 
@@ -52,11 +53,11 @@ public class DatosCheckActivity extends Activity {
 
 	private Spinner sp;
 	private LinkedList<String> tipos;
-	ArrayAdapter<String> spinner_adapter;
+	private ArrayAdapter<String> spinner_adapter;
 	
 	private Spinner sp2;
 	private LinkedList<String> tipos2;
-	ArrayAdapter<String> spinner_adapter2;
+	private ArrayAdapter<String> spinner_adapter2;
 	
 	
 	private String selectedType;
@@ -244,8 +245,8 @@ public class DatosCheckActivity extends Activity {
 				sugarComId = SugarConnection.getCompanyId(bu.getName(), id);
 				if (sugarComId.equals("")) {
 					sugarComId = SugarConnection
-							.newCompany(id, bu.getName(), null,
-									bu.getAddress(), bu.getPhoneNumber(), bu
+							.newCompany(id, bu.getName().toString(), null,
+									bu.getAddress().toString(), bu.getPhoneNumber(), bu
 											.getEmail(), null, null, bu
 											.getTypes().toString());
 				}
@@ -330,10 +331,10 @@ public class DatosCheckActivity extends Activity {
 				Log.d("FECHA", ((Editable)fechaCierre.getText()).toString());
 				
 				Log.d("Cantidad",((Editable)cantidad.getText()).toString());
+				
 				SugarConnection.newSale(id,  ((Editable)descriptor.getText()).toString(),
 						((Editable)fechaCierre.getText()).toString(), selectedType ,
 						((Editable)cantidad.getText()).toString(), sugarComId, conId);
-				
 				
 
 			} catch (Exception e) {

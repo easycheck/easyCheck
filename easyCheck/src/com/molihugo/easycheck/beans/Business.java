@@ -12,7 +12,18 @@ import fi.foyt.foursquare.api.entities.CompactVenue;
 public class Business implements Serializable {
 
 	public enum ApiProcedence {
-		GPLACES, YELP, FOUSQUARE
+		GPLACES, YELP, FOUSQUARE;
+		
+		public String toString(){
+			if (this.equals(GPLACES)){
+				return "GooglePlaces";
+			} else if (this.equals(YELP)){
+				return "Yelp";
+			} else if (this.equals(FOUSQUARE)){
+				return "Foursquare";
+			} else return "unknown";
+			
+		}
 	}
 
 	private static final long serialVersionUID = 1L;

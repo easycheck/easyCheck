@@ -48,9 +48,10 @@ public class VisitaActivity extends Activity {
 		}
 		lbl_location.setText(Html.fromHtml("<b>Lat:</b> " + la
 				+ ", <b>Lon:</b> " + lo));
-/*		lbl_category.setText("Tipo: "+bu.getTypes().toString());
+		lbl_category.setText("Tipo: "+bu.getTypes().toString());
+		
 		lbl_origin.setText("Datos de: "+bu.getApi().toString());
-*/	
+	
 		/** button vale **/
 		Button btnVale = (Button) findViewById(R.id.button3);
 
@@ -59,11 +60,9 @@ public class VisitaActivity extends Activity {
 
 			@Override
 			public void onClick(View arg0) {
-				
 					VisitaActivity.this.onBackPressed();
 			}
 		});
-	
 	}
 
 	@Override

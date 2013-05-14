@@ -12,11 +12,10 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.molihugo.easycheck.apis.googleplaces.SearchPlaceResult;
-import com.molihugo.easycheck.apis.googleplaces.SearchPlaceResults;
 import com.molihugo.easycheck.beans.Business;
 
 public class PlacesMapActivity extends android.support.v4.app.FragmentActivity {
@@ -37,6 +36,7 @@ public class PlacesMapActivity extends android.support.v4.app.FragmentActivity {
 		// Users current geo location
 		double user_latitude = i.getExtras().getDouble("user_latitude");
 		double user_longitude = i.getExtras().getDouble("user_longitude");
+		String ref = i.getExtras().getString("ref");
 
 		// Near places list
 		nearPlaces = (ArrayList<Business>) i.getSerializableExtra("near_places");
@@ -67,6 +67,10 @@ public class PlacesMapActivity extends android.support.v4.app.FragmentActivity {
 					.position(new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude)))
 					.title(place.getName())
 					.snippet(place.getAddress());
+			
+			if (ref.equalsIgnoreCase(place.getReference())){
+				m.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+			}
 
 			// Map item
 			Marker marker = mapa.addMarker(m);
@@ -74,6 +78,15 @@ public class PlacesMapActivity extends android.support.v4.app.FragmentActivity {
 			map.put(marker.getId(), place.getReference());
 		}
 
+		if (ref.equalsIgnoreCase("0")){
+			MarkerOptions mo = new MarkerOptions()
+	        .position(new LatLng(user_latitude,user_longitude))
+	        .title("Aquí estás")
+	        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+			Marker marker = mapa.addMarker(mo);
+		}
+		
+		
 		mapa.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
 
 			@Override

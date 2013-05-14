@@ -118,6 +118,7 @@ public class MainActivity extends Activity {
 				i.putExtra("user_longitude", lon);
 				// passing near places to map activity
 				i.putExtra("near_places", negocios);
+				i.putExtra("ref", "0");
 				// staring activity
 				startActivity(i);
 			}
