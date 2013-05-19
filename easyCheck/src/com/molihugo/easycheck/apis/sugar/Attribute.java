@@ -1,15 +1,15 @@
 package com.molihugo.easycheck.apis.sugar;
 
-public class Atributo {
+public class Attribute {
 	
 	private String name;
 	private String value;	
 	
-public Atributo() {
+public Attribute() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-public Atributo(String name, String value) {
+public Attribute(String name, String value) {
 		super();
 		this.name = name;
 		this.value = value;

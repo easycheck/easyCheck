@@ -69,21 +69,21 @@ public class SugarConnection {
    // the order is important, so use a ordered map
    Map<String, Object> request = new LinkedHashMap<String, Object>();
    request.put("user_auth", userCredentials);
-   request.put("application_name", Constantes.APPLICATION_NAME);
+   request.put("application_name", Constants.APPLICATION_NAME);
 
    MultipartEntity multipartEntity = new MultipartEntity();
-   multipartEntity.addPart("method", new StringBody(Constantes.LOGIN));
+   multipartEntity.addPart("method", new StringBody(Constants.LOGIN));
    // define request encoding
-   multipartEntity.addPart("input_type", new StringBody(Constantes.JSON));
+   multipartEntity.addPart("input_type", new StringBody(Constants.JSON));
    // define response encoding
-   multipartEntity.addPart("response_type", new StringBody(Constantes.JSON));
+   multipartEntity.addPart("response_type", new StringBody(Constants.JSON));
    multipartEntity.addPart("rest_data",
        new StringBody(JSONObject.toJSONString(request)));
 
    // yourSugarCRM has to be changed to your SugarCRM instance
    // something like localhost/sugarcrm
    
-   HttpPost httpPost = new HttpPost(Constantes.URL);
+   HttpPost httpPost = new HttpPost(Constants.URL);
    httpPost.setEntity(multipartEntity);
 
    DefaultHttpClient defaultHttpClient = new DefaultHttpClient();
@@ -93,7 +93,7 @@ public class SugarConnection {
    
    JSONObject parse = (JSONObject) JSONValue.parse(new InputStreamReader(
        entity.getContent()));
-   return (String) parse.get(Constantes.ID);
+   return (String) parse.get(Constants.ID);
  }
 	 /**
 	     * Retrieve a list of beans.  This is the primary method for getting list of SugarBeans from Sugar using the SOAP API.
@@ -132,18 +132,18 @@ public class SugarConnection {
 			request.put("deleted", deleted);
 			   
 			   MultipartEntity multipartEntity = new MultipartEntity();
-			   multipartEntity.addPart("method", new StringBody(Constantes.GET));
+			   multipartEntity.addPart("method", new StringBody(Constants.GET));
 			   // define request encoding
-			   multipartEntity.addPart("input_type", new StringBody(Constantes.JSON));
+			   multipartEntity.addPart("input_type", new StringBody(Constants.JSON));
 			   // define response encoding
-			   multipartEntity.addPart("response_type", new StringBody(Constantes.JSON));
+			   multipartEntity.addPart("response_type", new StringBody(Constants.JSON));
 			   multipartEntity.addPart("rest_data",
 			       new StringBody(JSONObject.toJSONString(request)));
 
 			   // yourSugarCRM has to be changed to your SugarCRM instance
 			   // something like localhost/sugarcrm
 			   
-			   HttpPost httpPost = new HttpPost(Constantes.URL);
+			   HttpPost httpPost = new HttpPost(Constants.URL);
 			   httpPost.setEntity(multipartEntity);
 
 			   DefaultHttpClient defaultHttpClient = new DefaultHttpClient();
@@ -194,18 +194,18 @@ public class SugarConnection {
 			request.put("order_by", order_by);
 			   
 			   MultipartEntity multipartEntity = new MultipartEntity();
-			   multipartEntity.addPart("method", new StringBody(Constantes.GETREL));
+			   multipartEntity.addPart("method", new StringBody(Constants.GETREL));
 			   // define request encoding
-			   multipartEntity.addPart("input_type", new StringBody(Constantes.JSON));
+			   multipartEntity.addPart("input_type", new StringBody(Constants.JSON));
 			   // define response encoding
-			   multipartEntity.addPart("response_type", new StringBody(Constantes.JSON));
+			   multipartEntity.addPart("response_type", new StringBody(Constants.JSON));
 			   multipartEntity.addPart("rest_data",
 			       new StringBody(JSONObject.toJSONString(request)));
 
 			   // yourSugarCRM has to be changed to your SugarCRM instance
 			   // something like localhost/sugarcrm
 			   
-			   HttpPost httpPost = new HttpPost(Constantes.URL);
+			   HttpPost httpPost = new HttpPost(Constants.URL);
 			   httpPost.setEntity(multipartEntity);
 
 			   DefaultHttpClient defaultHttpClient = new DefaultHttpClient();
@@ -257,17 +257,17 @@ public class SugarConnection {
 			request.put("name_value_lists", name_value_lists);
 			   
 			   MultipartEntity multipartEntity = new MultipartEntity();
-			   multipartEntity.addPart("method", new StringBody(Constantes.SET));
+			   multipartEntity.addPart("method", new StringBody(Constants.SET));
 			   // define request encoding
-			   multipartEntity.addPart("input_type", new StringBody(Constantes.JSON));
+			   multipartEntity.addPart("input_type", new StringBody(Constants.JSON));
 			   // define response encoding
-			   multipartEntity.addPart("response_type", new StringBody(Constantes.JSON));
+			   multipartEntity.addPart("response_type", new StringBody(Constants.JSON));
 			   multipartEntity.addPart("rest_data",
 			       new StringBody(JSONObject.toJSONString(request)));
 			   // yourSugarCRM has to be changed to your SugarCRM instance
 			   // something like localhost/sugarcrm
 			   
-			   HttpPost httpPost = new HttpPost(Constantes.URL);
+			   HttpPost httpPost = new HttpPost(Constants.URL);
 			   httpPost.setEntity(multipartEntity);
 
 			   DefaultHttpClient defaultHttpClient = new DefaultHttpClient();
@@ -312,18 +312,18 @@ public class SugarConnection {
 			request.put("delete", delete);
 			   
 			   MultipartEntity multipartEntity = new MultipartEntity();
-			   multipartEntity.addPart("method", new StringBody(Constantes.SETREL));
+			   multipartEntity.addPart("method", new StringBody(Constants.SETREL));
 			   // define request encoding
-			   multipartEntity.addPart("input_type", new StringBody(Constantes.JSON));
+			   multipartEntity.addPart("input_type", new StringBody(Constants.JSON));
 			   // define response encoding
-			   multipartEntity.addPart("response_type", new StringBody(Constantes.JSON));
+			   multipartEntity.addPart("response_type", new StringBody(Constants.JSON));
 			   multipartEntity.addPart("rest_data",
 			       new StringBody(JSONObject.toJSONString(request)));
 
 			   // yourSugarCRM has to be changed to your SugarCRM instance
 			   // something like localhost/sugarcrm
 			   
-			   HttpPost httpPost = new HttpPost(Constantes.URL);
+			   HttpPost httpPost = new HttpPost(Constants.URL);
 			   httpPost.setEntity(multipartEntity);
 
 			   DefaultHttpClient defaultHttpClient = new DefaultHttpClient();
@@ -678,10 +678,10 @@ public class SugarConnection {
 		}
 		 
 		 Gson mGson = new Gson();
-		 DatosResponse salesList1 = new DatosResponse();
+		 ResponseData salesList1 = new ResponseData();
 		 
 		 try{
-			 salesList1 = mGson.fromJson(response, DatosResponse.class);
+			 salesList1 = mGson.fromJson(response, ResponseData.class);
 		 }
 		 catch (JsonSyntaxException e) {
 		    	e.printStackTrace();
@@ -788,18 +788,7 @@ public class SugarConnection {
 	        return sorted_map;
 	 }
 	 
-	@SuppressLint("SimpleDateFormat")
-	/**
-	  * Formats a date into YYYY-MM-DD
-	  *
-	  * @param Date  date -- The date to be converted
-	  * @return String - The date in YYYY-MM-DD format 
-	  */
-	public static String getStringFromDate(Date date){
-		 
-		 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		 return dateFormat.format(date);
-	 }
+	
 
 }
 

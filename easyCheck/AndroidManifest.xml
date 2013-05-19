@@ -35,7 +35,7 @@
 
         <!-- FirstActivity -->
         <activity
-            android:name="com.molihugo.easycheck.FirstActivity"
+            android:name="com.molihugo.easycheck.MenuActivity"
             android:label="@string/title_activity_first" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -53,7 +53,7 @@
 
         <!-- BusinessListActivity -->
         <activity
-            android:name="com.molihugo.easycheck.MainActivity"
+            android:name="com.molihugo.easycheck.PlacesListActivity"
             android:label="@string/title_activity_main" >
         </activity>
 
@@ -89,15 +89,15 @@
 
         <!-- JornadaActivity -->
         <activity
-            android:name="com.molihugo.easycheck.JornadaActivity"
+            android:name="com.molihugo.easycheck.ReviewActivity"
             android:label="@string/title_activity_jornada" >
         </activity>
         <activity
-            android:name="com.molihugo.easycheck.NuevoContactoActivity"
+            android:name="com.molihugo.easycheck.NewContactActivity"
             android:label="@string/title_activity_nuevo_contacto" >
         </activity>
         <activity
-            android:name="com.molihugo.easycheck.VisitaActivity"
+            android:name="com.molihugo.easycheck.CheckinReviewActivity"
             android:label="@string/title_activity_visita" >
         </activity>
     </application>

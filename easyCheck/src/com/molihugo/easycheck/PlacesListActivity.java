@@ -38,14 +38,14 @@ import fi.foyt.foursquare.api.Result;
 import fi.foyt.foursquare.api.entities.CompactVenue;
 import fi.foyt.foursquare.api.entities.VenuesSearchResult;
 
-public class MainActivity extends Activity {
+public class PlacesListActivity extends Activity {
 
 	private LocationManager locationManager;
 	private MyLocationListener listener;
 
 	private AlertDialogManager alert = new AlertDialogManager();
 	private SearchPlaceResult nearPlaces;
-	private ArrayList<Business> negocios;
+	private ArrayList<Business> places;
 	private Button btnShowOnMap;
 	private ProgressDialog pDialog;
 	private ListView lv;
@@ -57,7 +57,7 @@ public class MainActivity extends Activity {
 
 	private static double lon = 0, lat;
 
-	private int fondo;
+	private int ratio;
 	private boolean apis[] = new boolean[3];
 
 	@Override
@@ -86,7 +86,7 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 
 		// get the variables passed by the previous activity.
-		fondo = getIntent().getExtras().getInt("fondo");
+		ratio = getIntent().getExtras().getInt("fondo");
 		apis[0] = getIntent().getExtras().getBoolean("google");
 		apis[1] = getIntent().getExtras().getBoolean("foursquare");
 		apis[2] = getIntent().getExtras().getBoolean("yelp");
@@ -109,7 +109,7 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(View arg0) {
 
-				Intent i = new Intent(MainActivity.this,
+				Intent i = new Intent(PlacesListActivity.this,
 						PlacesMapActivity.class);
 
 				// Sending user current geo location
@@ -117,7 +117,7 @@ public class MainActivity extends Activity {
 				i.putExtra("user_latitude", lat);
 				i.putExtra("user_longitude", lon);
 				// passing near places to map activity
-				i.putExtra("near_places", negocios);
+				i.putExtra("near_places", places);
 				i.putExtra("ref", "0");
 				// staring activity
 				startActivity(i);
@@ -151,7 +151,7 @@ public class MainActivity extends Activity {
 				in.putExtra(KEY_REFERENCE, reference);
 				in.putExtra(KEY_NAME, name);
 				// passing near places to map activity
-				in.putExtra("near_places", negocios);
+				in.putExtra("near_places", places);
 
 				startActivity(in);
 			}
@@ -190,7 +190,7 @@ public class MainActivity extends Activity {
 		protected void onPreExecute() {
 			super.onPreExecute();
 			lon = 0;
-			pDialog = new ProgressDialog(MainActivity.this);
+			pDialog = new ProgressDialog(PlacesListActivity.this);
 
 			pDialog.setMessage(Html
 					.fromHtml("<b>Busqueda</b><br/>Cargando Negocios..."));
@@ -226,7 +226,7 @@ public class MainActivity extends Activity {
 				;
 
 				Log.d("AAAAAAAAAAAAAAA", lat + "-lat & long-" + lon);
-				negocios = new ArrayList<Business>();
+				places = new ArrayList<Business>();
 
 				// FROM GOOGLE PLACES
 				if (apis[0]) {
@@ -246,38 +246,38 @@ public class MainActivity extends Activity {
 							// loop through each place
 							for (SearchPlaceResults p : nearPlaces.getResults()) {
 
-								negocios.add(new Business(p));
+								places.add(new Business(p));
 
 							}
 						} else if (status.equals("ZERO_RESULTS")) {
 							// Zero results found
 							alert.showAlertDialog(
-									MainActivity.this,
+									PlacesListActivity.this,
 									"Near Places",
 									"Sorry no places found. Try to change the types of places",
 									false);
 						} else if (status.equals("UNKNOWN_ERROR")) {
-							alert.showAlertDialog(MainActivity.this,
+							alert.showAlertDialog(PlacesListActivity.this,
 									"Places Error",
 									"Sorry unknown error occured.", false);
 						} else if (status.equals("OVER_QUERY_LIMIT")) {
 							alert.showAlertDialog(
-									MainActivity.this,
+									PlacesListActivity.this,
 									"Places Error",
 									"Sorry query limit to google places is reached",
 									false);
 						} else if (status.equals("REQUEST_DENIED")) {
-							alert.showAlertDialog(MainActivity.this,
+							alert.showAlertDialog(PlacesListActivity.this,
 									"Places Error",
 									"Sorry error occured. Request is denied",
 									false);
 						} else if (status.equals("INVALID_REQUEST")) {
-							alert.showAlertDialog(MainActivity.this,
+							alert.showAlertDialog(PlacesListActivity.this,
 									"Places Error",
 									"Sorry error occured. Invalid Request",
 									false);
 						} else {
-							alert.showAlertDialog(MainActivity.this,
+							alert.showAlertDialog(PlacesListActivity.this,
 									"Places Error", "Sorry error occured.",
 									false);
 						}
@@ -296,7 +296,7 @@ public class MainActivity extends Activity {
 						// data
 						for (CompactVenue venue : result.getResult()
 								.getVenues()) {
-							negocios.add(new Business(venue));
+							places.add(new Business(venue));
 							;
 						}
 					} else {
@@ -319,7 +319,7 @@ public class MainActivity extends Activity {
 
 					for (BusinessDetail bD : blb.getBusinesses()) {
 
-						negocios.add(new Business(bD));
+						places.add(new Business(bD));
 
 					}
 
@@ -347,9 +347,9 @@ public class MainActivity extends Activity {
 					 * Updating parsed Places into LISTVIEW 683591264 618456527
 					 * 681456527 juantxu sodupe
 					 * */
-					if (!negocios.isEmpty()) {
+					if (!places.isEmpty()) {
 						// loop through each place
-						for (Business b : negocios) {
+						for (Business b : places) {
 							HashMap<String, String> map = new HashMap<String, String>();
 
 							// Place reference won't display in listview -
@@ -365,7 +365,7 @@ public class MainActivity extends Activity {
 						}
 						// list adapter
 						ListAdapter adapter = new SimpleAdapter(
-								MainActivity.this, placesListItems,
+								PlacesListActivity.this, placesListItems,
 								R.layout.list_item, new String[] {
 										KEY_REFERENCE, KEY_NAME }, new int[] {
 										R.id.reference, R.id.name });
@@ -375,7 +375,7 @@ public class MainActivity extends Activity {
 					} else {
 						// Zero results found
 						alert.showAlertDialog(
-								MainActivity.this,
+								PlacesListActivity.this,
 								"Near Places",
 								"Sorry no places found. Try to change the types of places",
 								false);

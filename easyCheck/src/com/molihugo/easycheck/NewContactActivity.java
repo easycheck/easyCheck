@@ -10,14 +10,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.easycheck.R;
-import com.molihugo.easycheck.beans.Contacto;
+import com.molihugo.easycheck.beans.Contact;
 
-public class NuevoContactoActivity extends Activity {
+public class NewContactActivity extends Activity {
 	
-	Button btnGuardar;
-	Contacto contacto;
-	EditText nombre, telefono, mail, posicion;
-	String nom, tel, mai, pos;
+	Button btnSave;
+	Contact contact;
+	EditText name, telephone, mail, position;
+	String nam, tel, mai, pos;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -25,28 +25,28 @@ public class NuevoContactoActivity extends Activity {
 		setContentView(R.layout.activity_contacto);
 		
 		/** button jornada **/
-		btnGuardar = (Button) findViewById(R.id.button3);
+		btnSave = (Button) findViewById(R.id.button3);
 		
-		nombre = (EditText) findViewById(R.id.editText1);
-		telefono = (EditText) findViewById(R.id.editText5);
+		name = (EditText) findViewById(R.id.editText1);
+		telephone = (EditText) findViewById(R.id.editText5);
 		mail = (EditText) findViewById(R.id.editText3);
-		posicion = (EditText) findViewById(R.id.editText4);
+		position = (EditText) findViewById(R.id.editText4);
 
 		/** para mostrar los checkins sin almacenar de la jornada actual */
-		btnGuardar.setOnClickListener(new View.OnClickListener() {
+		btnSave.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
 				
-				nom = ((Editable)nombre.getText()).toString();
-				tel = ((Editable)telefono.getText()).toString();
+				nam = ((Editable)name.getText()).toString();
+				tel = ((Editable)telephone.getText()).toString();
 				mai =((Editable)mail.getText()).toString();
-				pos = ((Editable)posicion.getText()).toString();
-				contacto = new Contacto (nom,tel,mai,pos);
+				pos = ((Editable)position.getText()).toString();
+				contact = new Contact (nam,tel,mai,pos);
 				
 				try {
 					 Intent returnIntent = new Intent();
-					 returnIntent.putExtra("result",contacto);
+					 returnIntent.putExtra("result",contact);
 					 setResult(RESULT_OK,returnIntent);     
 					 finish();
 				} catch (Throwable e) {

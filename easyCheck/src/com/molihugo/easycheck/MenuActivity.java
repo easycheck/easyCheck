@@ -16,7 +16,7 @@ import com.example.easycheck.R;
 import com.molihugo.easycheck.utils.AlertDialogManager;
 import com.molihugo.easycheck.utils.ConnectionDetector;
 
-public class FirstActivity extends Activity {
+public class MenuActivity extends Activity {
 
 	// variables for internet connection check
 	private Boolean isInternetPresent = false;
@@ -24,11 +24,11 @@ public class FirstActivity extends Activity {
 	private AlertDialogManager alert = new AlertDialogManager();
 
 	// view components
-	private Button btnCheck, btnJornada;
+	private Button btnCheck, btnReview;
 
 	// settings
 	private boolean apis[] = new boolean[3];
-	private String fondo = null;
+	private String ratio = null;
 	private int color;
 
 	@Override
@@ -50,7 +50,7 @@ public class FirstActivity extends Activity {
 			@Override
 			public void onClick(View arg0) {
 				Intent i = new Intent(getApplicationContext(),
-						MainActivity.class);
+						PlacesListActivity.class);
 				i.putExtra("google", apis[0]);
 				i.putExtra("foursquare", apis[1]);
 				i.putExtra("yelp", apis[2]);
@@ -60,15 +60,15 @@ public class FirstActivity extends Activity {
 		});
 
 		/** button jornada **/
-		btnJornada = (Button) findViewById(R.id.button2);
+		btnReview = (Button) findViewById(R.id.button2);
 
 		/** para mostrar los checkins sin almacenar de la jornada actual */
-		btnJornada.setOnClickListener(new View.OnClickListener() {
+		btnReview.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
 				Intent i = new Intent(getApplicationContext(),
-						JornadaActivity.class);
+						ReviewActivity.class);
 				startActivity(i);
 			}
 		});
@@ -111,7 +111,7 @@ public class FirstActivity extends Activity {
 		if (!isInternetPresent) {
 			// Internet Connection is not present
 			alert.showAlertDialog(
-					FirstActivity.this,
+					MenuActivity.this,
 					"Error de conectividad",
 					"Por favor, revise su conexión de datos y vuelva a intentarlo",
 					false);
@@ -135,16 +135,16 @@ public class FirstActivity extends Activity {
 		apis[0] = sharedPrefs.getBoolean("Google", false);
 		apis[1] = sharedPrefs.getBoolean("Foursquare", false);
 		apis[2] = sharedPrefs.getBoolean("Yelp", false);
-		fondo = sharedPrefs.getString("Fondo", "negro");
+		ratio = sharedPrefs.getString("Fondo", "negro");
 		Log.d("APIS-0", String.valueOf(apis[0]));
 		Log.d("APIS-1", String.valueOf(apis[1]));
 		Log.d("APIS-2", String.valueOf(apis[2]));
 
-		if (fondo.equalsIgnoreCase("azul")) {
+		if (ratio.equalsIgnoreCase("azul")) {
 			color = Color.BLUE;
-		} else if (fondo.equalsIgnoreCase("blanco")) {
+		} else if (ratio.equalsIgnoreCase("blanco")) {
 			color = Color.WHITE;
-		} else if (fondo.equalsIgnoreCase("negro")) {
+		} else if (ratio.equalsIgnoreCase("negro")) {
 			color = Color.BLACK;
 		}
 

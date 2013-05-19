@@ -42,16 +42,16 @@ public class LoginActivity extends Activity {
 	private UserLoginTask mAuthTask = null;
 
 	// Values for email and password at the time of the login attempt.
-	private String mEmail;
-	private String mPassword;
+	private String uEmail;
+	private String uPassword;
 
 	// UI references.
-	private EditText mEmailView;
-	private EditText mPasswordView;
+	private EditText emailView;
+	private EditText passwordView;
 
 	// color for the error font
-	private int ecolor = Color.RED;
-	private ForegroundColorSpan fgcspan = new ForegroundColorSpan(ecolor);
+	private int eColor = Color.RED;
+	private ForegroundColorSpan fgcspan = new ForegroundColorSpan(eColor);
 	private SpannableStringBuilder ssbuilder;
 	private String estring;
 
@@ -82,11 +82,11 @@ public class LoginActivity extends Activity {
 		}
 
 		// Set up the login form.
-		mEmailView = (EditText) findViewById(R.id.email);
-		mEmailView.setText(mEmail);
+		emailView = (EditText) findViewById(R.id.email);
+		emailView.setText(uEmail);
 
-		mPasswordView = (EditText) findViewById(R.id.password);
-		mPasswordView
+		passwordView = (EditText) findViewById(R.id.password);
+		passwordView
 				.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 					@Override
 					public boolean onEditorAction(TextView textView, int id,
@@ -126,52 +126,52 @@ public class LoginActivity extends Activity {
 		}
 
 		// Reset errors.
-		mEmailView.setError(null);
-		mPasswordView.setError(null);
+		emailView.setError(null);
+		passwordView.setError(null);
 
 		// Store values at the time of the login attempt.
-		mEmail = mEmailView.getText().toString();
-		mPassword = mPasswordView.getText().toString();
+		uEmail = emailView.getText().toString();
+		uPassword = passwordView.getText().toString();
 
 		boolean cancel = false;
 		View focusView = null;
 
 		// Check for a valid password.
-		if (TextUtils.isEmpty(mPassword)) {
+		if (TextUtils.isEmpty(uPassword)) {
 			estring = getString(R.string.error_field_required);
 			ssbuilder = new SpannableStringBuilder(estring);
 			ssbuilder.setSpan(fgcspan, 0, estring.length(), 0);
 
-			mPasswordView.setError(ssbuilder);
-			focusView = mPasswordView;
+			passwordView.setError(ssbuilder);
+			focusView = passwordView;
 			cancel = true;
-		} else if (mPassword.length() < 4) {
+		} else if (uPassword.length() < 4) {
 			estring = getString(R.string.error_invalid_password);
 			ssbuilder = new SpannableStringBuilder(estring);
 			ssbuilder.setSpan(fgcspan, 0, estring.length(), 0);
 
-			mPasswordView.setError(ssbuilder);
-			focusView = mPasswordView;
+			passwordView.setError(ssbuilder);
+			focusView = passwordView;
 			cancel = true;
 		}
 
 		// Check for a valid email address.
-		if (TextUtils.isEmpty(mEmail)) {
+		if (TextUtils.isEmpty(uEmail)) {
 			estring = getString(R.string.error_field_required);
 			ssbuilder = new SpannableStringBuilder(estring);
 			ssbuilder.setSpan(fgcspan, 0, estring.length(), 0);
 
-			mEmailView.setError(ssbuilder);
-			focusView = mEmailView;
+			emailView.setError(ssbuilder);
+			focusView = emailView;
 			cancel = true;
-		} else if (mEmail.length() < 4) {
+		} else if (uEmail.length() < 4) {
 			estring = getString(R.string.error_invalid_email);
-			fgcspan = new ForegroundColorSpan(ecolor);
+			fgcspan = new ForegroundColorSpan(eColor);
 			ssbuilder = new SpannableStringBuilder(estring);
 			ssbuilder.setSpan(fgcspan, 0, estring.length(), 0);
 
-			mEmailView.setError(ssbuilder);
-			focusView = mEmailView;
+			emailView.setError(ssbuilder);
+			focusView = emailView;
 			cancel = true;
 		}
 
@@ -202,7 +202,7 @@ public class LoginActivity extends Activity {
 			pDialog = new ProgressDialog(LoginActivity.this);
 
 			pDialog.setMessage(Html
-					.fromHtml("<b>Busqueda</b><br/>Cargando Negocios..."));
+					.fromHtml("<b>Login</b><br/>Esperando al CRM..."));
 			pDialog.setIndeterminate(false);
 			pDialog.setCancelable(false);
 			pDialog.show();
@@ -212,11 +212,8 @@ public class LoginActivity extends Activity {
 		protected Boolean doInBackground(Void... params) {
 
 			try {
-				id = SugarConnection.login(mEmail, mPassword);
-				// Log.d("IIDD", id);
+				id = SugarConnection.login(uEmail, uPassword);
 				if (id != null) {
-					return true;
-				} else if (mEmail.equals("noSugar")) {
 					return true;
 				} else {
 					return false;
@@ -227,7 +224,6 @@ public class LoginActivity extends Activity {
 			} catch (ClientProtocolException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
-				Log.d("IIDD", "PASO");
 				e.printStackTrace();
 			}
 			
@@ -243,9 +239,9 @@ public class LoginActivity extends Activity {
 				getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit()
 					.putString(PREF_ID, id).commit();
 				getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit()
-				.putString("nombre", mEmail).commit();
+				.putString("nombre", uEmail).commit();
 				Intent i = new Intent(getApplicationContext(),
-						FirstActivity.class);
+						MenuActivity.class);
 				i.putExtra("idUser", id);
 				startActivity(i);
 				finish();
@@ -255,8 +251,8 @@ public class LoginActivity extends Activity {
 				ssbuilder = new SpannableStringBuilder(estring);
 				ssbuilder.setSpan(fgcspan, 0, estring.length(), 0);
 
-				mPasswordView.setError(ssbuilder);
-				mPasswordView.requestFocus();
+				passwordView.setError(ssbuilder);
+				passwordView.requestFocus();
 			}
 		}
 

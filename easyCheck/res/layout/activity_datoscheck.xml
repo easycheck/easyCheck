@@ -8,7 +8,7 @@
         android:id="@+id/editText1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Descriptor Visita" >
+        android:hint="@string/txt_nombreVisita" >
 
         <requestFocus />
     </EditText>
@@ -24,13 +24,13 @@
         android:id="@+id/editText5"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Cantidad" />
+        android:hint="@string/txt_Cantidad" />
 
     <EditText
         android:id="@+id/editText6"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Fecha de Cierre" />
+        android:hint="@string/txt_Description" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -38,7 +38,7 @@
 
         <Spinner
             android:id="@+id/spinner2"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:drawSelectorOnTop="true"
@@ -47,17 +47,16 @@
         <Button
             android:id="@+id/button2"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.7"
-            android:text="Nuevo" />
+            android:layout_height="match_parent"
+            android:minWidth="90dp"
+            android:text="@string/btn_nuevoContacto" />
+
     </LinearLayout>
 
     <Button
         android:id="@+id/button3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_marginTop="20dp"
         android:gravity="center_horizontal"
         android:text="@string/btn_guardar" />
 

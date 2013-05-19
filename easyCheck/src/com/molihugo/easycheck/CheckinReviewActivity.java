@@ -12,7 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class VisitaActivity extends Activity {
+public class CheckinReviewActivity extends Activity {
 
 	Business bu;
 	
@@ -60,7 +60,7 @@ public class VisitaActivity extends Activity {
 
 			@Override
 			public void onClick(View arg0) {
-					VisitaActivity.this.onBackPressed();
+					CheckinReviewActivity.this.onBackPressed();
 			}
 		});
 	}

@@ -66,7 +66,7 @@ public class PlacesMapActivity extends android.support.v4.app.FragmentActivity {
 			MarkerOptions m = new MarkerOptions()
 					.position(new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude)))
 					.title(place.getName())
-					.snippet(place.getAddress());
+					.snippet(place.getTypes().toString());
 			
 			if (ref.equalsIgnoreCase(place.getReference())){
 				m.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));

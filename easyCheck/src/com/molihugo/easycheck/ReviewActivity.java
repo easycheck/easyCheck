@@ -22,7 +22,7 @@ import com.molihugo.easycheck.apis.sugar.SugarConnection;
 import com.molihugo.easycheck.beans.Business;
 import com.molihugo.easycheck.utils.CheckDAO;
 
-public class JornadaActivity extends Activity {
+public class ReviewActivity extends Activity {
 
 	CheckDAO ranking;
 	// rankingItems data
@@ -30,7 +30,7 @@ public class JornadaActivity extends Activity {
 	// Ranking Listview
 	ListView lv;
 
-	List<Business> lista;
+	List<Business> list;
 	
 	String id;
 	String username;
@@ -55,21 +55,21 @@ public class JornadaActivity extends Activity {
 
 		
 		
-		lista = ranking.get();
+		list = ranking.get();
 		
 		HashMap<String,String> map = new HashMap<String,String>();
 		
-		for (int i= 0; i<lista.size(); i++){
+		for (int i= 0; i<list.size(); i++){
 			map = new HashMap<String,String>();
-			map.put("referencia",lista.get(i).getReference());
-			map.put("nombre", lista.get(i).getName());
+			map.put("referencia",list.get(i).getReference());
+			map.put("nombre", list.get(i).getName());
 			rankingItems.add(map);
 		}
 		
 		
 		// list adapter
 		ListAdapter adapter = new SimpleAdapter(
-				JornadaActivity.this, rankingItems,
+				ReviewActivity.this, rankingItems,
 				R.layout.list_item, new String[] {
 						"referencia", "nombre" },
 				new int[] { R.id.reference, R.id.name });
@@ -87,7 +87,7 @@ public class JornadaActivity extends Activity {
 						.findViewById(R.id.reference)).getText().toString();
 				Business bu = null;
 
-				for(Business b: lista){
+				for(Business b: list){
 					if (b.getReference().equals(reference)){
 						bu = new Business(b);
 					}
@@ -95,7 +95,7 @@ public class JornadaActivity extends Activity {
 
 				// Starting new intent
 				Intent in = new Intent(getApplicationContext(),
-						VisitaActivity.class);
+						CheckinReviewActivity.class);
 
 				in.putExtra("business", bu);
 

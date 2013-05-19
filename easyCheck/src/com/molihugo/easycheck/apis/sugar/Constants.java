@@ -1,8 +1,8 @@
 package com.molihugo.easycheck.apis.sugar;
 
-public class Constantes {
+public class Constants {
 	
-	public static final String URL = "http://192.168.42.209:80/SugarCE6.5.9/service/v4/rest.php?";
+	public static final String URL = "http://192.168.42.125:80/SugarCE6.5.9/service/v4/rest.php?";
 	public static final String JSON = "JSON";
 	public static final String LOGIN = "login";
 	public static final String APPLICATION_NAME = "SugarCE";

@@ -30,7 +30,7 @@ public class SinglePlaceActivity extends Activity {
 	ProgressDialog pDialog;
 
 	// Button
-	Button btnSeguir;
+	Button btnContinue;
 	
 	private String reference, name;
 	
@@ -94,10 +94,10 @@ public class SinglePlaceActivity extends Activity {
 		lbl_origin.setText(bu.getApi().toString());
 
 		/** button seguir **/
-		btnSeguir = (Button) findViewById(R.id.button3);
+		btnContinue = (Button) findViewById(R.id.button3);
 
 		/** Button seguir click event for continue with this business */
-		btnSeguir.setOnClickListener(new View.OnClickListener() {
+		btnContinue.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {

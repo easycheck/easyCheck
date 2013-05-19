@@ -26,7 +26,7 @@
     <!-- Strings related to login -->
     <string name="prompt_email">Usuario</string>
     <string name="prompt_password">Contraseña</string>
-    <string name="action_sign_in_register"><b>Entrar a EasyCheck</b></string>
+    <string name="action_sign_in_register"><b>Entrar</b></string>
     <string name="action_sign_in_short">Entrar</string>
     <string name="action_forgot_password">Recuperar contraseña perdida</string>
     <string name="login_progress_signing_in">Entrando&#8230;</string>
@@ -38,5 +38,11 @@
     <string name="title_activity_nuevo_contacto">Nuevo Contacto</string>
     <string name="title_activity_visita">VisitaActivity</string>
     <string name="lbl_newContacto">Datos del nuevo contacto</string>
+    <string name="btn_checknow">Registrar Visita</string>
+    <string name="btn_mostrarNegociosEnMapa">Mostrar negocios en el Mapa</string>
+    <string name="txt_Description">Descripción de la visita</string>
+    <string name="txt_nombreVisita">Nombre de la visita</string>
+    <string name="txt_Cantidad">Cantidad tratada</string>
+    <string name="btn_nuevoContacto">Nuevo Contacto</string>
 
 </resources>

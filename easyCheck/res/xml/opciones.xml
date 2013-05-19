@@ -21,13 +21,13 @@
         
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="Estilo">
+    <PreferenceCategory android:title="Opciones generales de búsqueda">
         
         <ListPreference
             android:key="Fondo"
-            android:title="Color de fondo"
-            android:summary="Selecciona el color para el fondo de pantalla"
-            android:dialogTitle="Selecciona un color"
+            android:title="Radio de búsqueda"
+            android:summary="Selecciona el radio en metros para buscar negocios"
+            android:dialogTitle="Selecciona un radio"
             android:entries="@array/Colores"
             android:entryValues="@array/Colores"
             />

@@ -9,7 +9,7 @@
         android:id="@+id/button3"
         android:layout_width="202dp"
         android:layout_height="105dp"
-        android:text="Check Now!" />
+        android:text="@string/btn_checknow" />
 
     <Button
         android:id="@+id/button2"

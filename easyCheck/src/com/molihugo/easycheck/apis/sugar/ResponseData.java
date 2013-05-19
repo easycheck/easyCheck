@@ -2,14 +2,14 @@ package com.molihugo.easycheck.apis.sugar;
 
 import java.util.List;
 
-public class DatosResponse {
+public class ResponseData {
 	private List<Sale> entry_list;
 	private List<String> relationship_list;
 	private String next_offset;
 	private String result_count;
 	private String total_count;
 	
-	public DatosResponse(List<Sale> entry_list, List<String> relationship_list,
+	public ResponseData(List<Sale> entry_list, List<String> relationship_list,
 			String next_offset, String result_count, String total_count) {
 		super();
 		this.entry_list = entry_list;
@@ -19,7 +19,7 @@ public class DatosResponse {
 		this.total_count = total_count;
 	}
 
-	public DatosResponse() {
+	public ResponseData() {
 		super();
 		// TODO Auto-generated constructor stub
 	}

@@ -26,7 +26,7 @@ import android.widget.Spinner;
 import com.example.easycheck.R;
 import com.molihugo.easycheck.apis.sugar.SugarConnection;
 import com.molihugo.easycheck.beans.Business;
-import com.molihugo.easycheck.beans.Contacto;
+import com.molihugo.easycheck.beans.Contact;
 import com.molihugo.easycheck.utils.AlertDialogManager;
 import com.molihugo.easycheck.utils.CheckDAO;
 import com.molihugo.easycheck.utils.Utils;
@@ -40,29 +40,29 @@ public class DatosCheckActivity extends Activity {
 	private ProgressDialog pDialog2;
 	private ProgressDialog pDialog;
 
-	private Button btnConfirmar, btnNuevoContacto;
+	private Button btnConfirm, btnNewContact;
 	private CheckDAO dao;
 
 	private Business bu;
 	private List<HashMap<String, String>> placesListItems = new ArrayList<HashMap<String, String>>();
 
-	private EditText descriptor, cantidad, fechaCierre;
+	private EditText descriptor, quantity, closingDate;
 	private String id;
 
-	private Contacto contacto;
+	private Contact contact;
 
 	private Spinner sp;
-	private LinkedList<String> tipos;
+	private LinkedList<String> categories;
 	private ArrayAdapter<String> spinner_adapter;
 	
 	private Spinner sp2;
-	private LinkedList<String> tipos2;
+	private LinkedList<String> categories2;
 	private ArrayAdapter<String> spinner_adapter2;
 	
 	
 	private String selectedType;
 	
-	private boolean nuevoContacto = false;
+	private boolean newContact = false;
 	
 	private String conId;
 
@@ -82,22 +82,22 @@ public class DatosCheckActivity extends Activity {
 		}
 
 		descriptor = (EditText) findViewById(R.id.editText1);
-		cantidad = (EditText) findViewById(R.id.editText5);
-		fechaCierre = (EditText) findViewById(R.id.editText6);
+		quantity = (EditText) findViewById(R.id.editText5);
+		closingDate = (EditText) findViewById(R.id.editText6);
 
 		Intent i = getIntent();
 		bu = (Business) i.getSerializableExtra("business");
 
 		// spinner con tipos de Visita
 		sp = (Spinner) findViewById(R.id.spinner1);
-		tipos = new LinkedList<String>();
-		tipos.add("Seleccione tipo visita");
-		tipos.add("Check-in");
-		tipos.add("Presupuesto");
-		tipos.add("Pre-Acuerdo");
-		tipos.add("Venta Cerrada");
+		categories = new LinkedList<String>();
+		categories.add("Seleccione tipo visita");
+		categories.add("Check-in");
+		categories.add("Presupuesto");
+		categories.add("Pre-Acuerdo");
+		categories.add("Venta Cerrada");
 		spinner_adapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_spinner_item, tipos);
+				android.R.layout.simple_spinner_item, categories);
 		spinner_adapter
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		sp.setAdapter(spinner_adapter);
@@ -113,7 +113,7 @@ public class DatosCheckActivity extends Activity {
 		    	
 		    	if (position != 0){
 
-			    	selectedType = tipos.get(position);
+			    	selectedType = categories.get(position);
 			    	Log.d("---TYPEEEE---", selectedType);
 		    	}else{
 		    		selectedType = null;
@@ -136,7 +136,7 @@ public class DatosCheckActivity extends Activity {
 		    		conId = placesListItems.get(position-1).get("id");
 		    		Log.d("---CONID---", conId);
 		    	}
-		    	if (!nuevoContacto && position==0){
+		    	if (!newContact && position==0){
 		    		conId=null;
 		    	}
 		    }
@@ -152,27 +152,27 @@ public class DatosCheckActivity extends Activity {
 		
 
 		// botón para un nuevo contacto
-		btnNuevoContacto = (Button) findViewById(R.id.button2);
-		btnNuevoContacto.setOnClickListener(new View.OnClickListener() {
+		btnNewContact = (Button) findViewById(R.id.button2);
+		btnNewContact.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
 				int in = 1;
 				Intent i = new Intent(getApplicationContext(),
-						NuevoContactoActivity.class);
+						NewContactActivity.class);
 				startActivityForResult(i, in);
 			}
 		});
 
 		// botón para confirmar visita y volver a FirstActivity
-		btnConfirmar = (Button) findViewById(R.id.button3);
-		btnConfirmar.setOnClickListener(new View.OnClickListener() {
+		btnConfirm = (Button) findViewById(R.id.button3);
+		btnConfirm.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
 
 				dao.insert(bu);
-				if (conId==null && !nuevoContacto){
+				if (conId==null && !newContact){
 					alert.showAlertDialog(DatosCheckActivity.this,"Error", "No se ha seleccionado contacto", false);
 				}
 				else if (selectedType==null){
@@ -181,7 +181,7 @@ public class DatosCheckActivity extends Activity {
 				else {
 					new DataTransaction().execute();
 				Intent i = new Intent(getApplicationContext(),
-						FirstActivity.class);
+						MenuActivity.class);
 				i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				startActivity(i);
 				}
@@ -196,10 +196,10 @@ public class DatosCheckActivity extends Activity {
 		if (requestCode == 1) {
 
 			if (resultCode == RESULT_OK) {
-				contacto = (Contacto) data.getSerializableExtra("result");
-				nuevoContacto = true;
-				tipos2 = new LinkedList<String>();
-				tipos2.add(contacto.getNombre());
+				contact = (Contact) data.getSerializableExtra("result");
+				newContact = true;
+				categories2 = new LinkedList<String>();
+				categories2.add(contact.getName());
 				sp2.setClickable(false);
 			}
 			if (resultCode == RESULT_CANCELED) {
@@ -212,9 +212,9 @@ public class DatosCheckActivity extends Activity {
 	protected void onResume() {
 		
 		super.onResume();
-		if (nuevoContacto){
+		if (newContact){
 			spinner_adapter2 = new ArrayAdapter<String>(DatosCheckActivity.this,
-				android.R.layout.simple_spinner_item, tipos2);
+				android.R.layout.simple_spinner_item, categories2);
 		spinner_adapter2
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		sp2.setAdapter(spinner_adapter2);
@@ -267,26 +267,26 @@ public class DatosCheckActivity extends Activity {
 			runOnUiThread(new Runnable() {
 				public void run() {
 
-					tipos2 = new LinkedList<String>();
+					categories2 = new LinkedList<String>();
 					
 					if (!placesListItems.isEmpty()) {
-						tipos2.add("Seleccione un contacto");
+						categories2.add("Seleccione un contacto");
 						for (Iterator<HashMap<String,String>> iterator = placesListItems.iterator(); iterator
 								.hasNext();) {
 							HashMap<String,String> type = iterator.next();
-							tipos2.add(type.get("name").toString());
+							categories2.add(type.get("name").toString());
 					
 						}
 						
 						
 					} else {
-						tipos2.add("Ningun contacto para esta empresa");
+						categories2.add("Ningun contacto para esta empresa");
 					}
 
 					// Log.d("ID", com);
 					//Log.d("CONTAAAAAACTS", placesListItems.get(0).get("name"));
 					spinner_adapter2 = new ArrayAdapter<String>(DatosCheckActivity.this,
-							android.R.layout.simple_spinner_item, tipos2);
+							android.R.layout.simple_spinner_item, categories2);
 					spinner_adapter2
 							.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 					sp2.setAdapter(spinner_adapter2);
@@ -317,10 +317,10 @@ public class DatosCheckActivity extends Activity {
 			try {
 
 				// LLAMADA A SUGAR
-				if (nuevoContacto){
+				if (newContact){
 					conId = SugarConnection.newContact(id,
-							contacto.getNombre(), contacto.getTelefono(),
-							contacto.getMail(), contacto.getPosicion(), sugarComId);
+							contact.getName(), contact.getTelephone(),
+							contact.getMail(), contact.getPosition(), sugarComId);
 				}
 
 				
@@ -328,13 +328,13 @@ public class DatosCheckActivity extends Activity {
 				Log.d("COMIDDDDDDD", sugarComId);
 				Log.d("COMIDDDDDDD", selectedType);
 				Log.d("DESCRIPCION", ((Editable)descriptor.getText()).toString());
-				Log.d("FECHA", ((Editable)fechaCierre.getText()).toString());
+				Log.d("FECHA", ((Editable)closingDate.getText()).toString());
 				
-				Log.d("Cantidad",((Editable)cantidad.getText()).toString());
+				Log.d("Cantidad",((Editable)quantity.getText()).toString());
 				
 				SugarConnection.newSale(id,  ((Editable)descriptor.getText()).toString(),
-						((Editable)fechaCierre.getText()).toString(), selectedType ,
-						((Editable)cantidad.getText()).toString(), sugarComId, conId);
+						((Editable)closingDate.getText()).toString(), selectedType ,
+						((Editable)quantity.getText()).toString(), sugarComId, conId, conId, conId);
 				
 
 			} catch (Exception e) {
