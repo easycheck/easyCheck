@@ -48,9 +48,12 @@ public class CheckinReviewActivity extends Activity {
 		}
 		lbl_location.setText(Html.fromHtml("<b>Lat:</b> " + la
 				+ ", <b>Lon:</b> " + lo));
-		lbl_category.setText("Tipo: "+bu.getTypes().toString());
-		
+		if (bu.getTypes()!=null){
+			lbl_category.setText("Tipo: "+bu.getTypes().toString());
+		}
+		if (bu.getApi()!=null){
 		lbl_origin.setText("Datos de: "+bu.getApi().toString());
+		}
 	
 		/** button vale **/
 		Button btnVale = (Button) findViewById(R.id.button3);
