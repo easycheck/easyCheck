@@ -740,36 +740,32 @@ public class SugarConnection {
 				Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sugarcrm", "root", "root");
 				Statement st = con.createStatement();
 				StringBuilder sql = new StringBuilder();
-				sql.append("select distinct t1.name");
-				sql.append(" from marke_sale t2");
-				sql.append("inner join marke_sale_marke_contact_c t on (t.marke_sale_marke_contactmarke_sale_idb=t2.id)");
-				sql.append("inner join marke_contact t1 on (t.marke_sale_marke_contactmarke_contact_ida=t1.id);");
+				sql.append("select id from users");
 				ResultSet rs = st.executeQuery(sql.toString());
 				
 				while (rs.next())
 				{
 					
-					String name = (String) rs.getObject("name");
+					String id = (String) rs.getObject("id");
 					
 					Statement st2 = con.createStatement();
 					StringBuilder sql2 = new StringBuilder();
 					sql2.append("select count(*)");
-					sql2.append(" from marke_sale t2");
-					sql2.append(" inner join marke_sale_marke_contact_c t on (t.marke_sale_marke_contactmarke_sale_idb=t2.id)");
-					sql2.append(" inner join marke_contact t1 on (t.marke_sale_marke_contactmarke_contact_ida=t1.id);");
-					sql2.append(" where t1.name='");
-					sql2.append(name);
+					sql2.append(" from marke_sale");
+					sql2.append(" where created_by='");
+					sql2.append(id);
 					sql2.append("'");
 					sql2.append(" and");
-					sql2.append(" t2.date_entered>='");
+					sql2.append(" date_entered>='");
 					sql2.append(fechaIni);
-					sql2.append("' and t2.date_entered<='");
+					sql2.append("' and date_entered<='");
 					sql2.append(fechaFin);
 					sql2.append("'");
 					ResultSet rs2 = st2.executeQuery(sql2.toString());
 					while (rs2.next()){
+						 
 						Long count = (Long) rs2.getObject("count(*)");
-						clasificacion.put(name, count);
+						clasificacion.put(id.split("_")[1], count);
 					}
 					rs2.close();
 					st2.close();
