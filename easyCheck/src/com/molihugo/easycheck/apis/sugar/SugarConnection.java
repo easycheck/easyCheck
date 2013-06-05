@@ -1,7 +1,10 @@
 package com.molihugo.easycheck.apis.sugar;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -23,10 +26,13 @@ import java.util.TreeMap;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
@@ -731,57 +737,80 @@ public class SugarConnection {
 		 return finalResponse;
 		 
 	 }
-	 
-	 public static TreeMap<String,Long> getStatics(String fechaIni, String fechaFin){
-		 HashMap<String, Long> clasificacion = new HashMap<String,Long>();
+	 public static String convertStreamToString(InputStream is)
+	    {
+	    	BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+	    	StringBuilder sb = new StringBuilder();
+
+	    	String line = null;
+	    	try {
+	    		while ((line = reader.readLine()) != null) {
+	    			sb.append(line + "\n");
+	    		}
+	    	}
+	    	catch (IOException e) {
+	    	}
+	    	finally {
+	    		try {
+	    			is.close();
+	    		} catch (IOException e1) {
+	    		}
+	    	}
+	    	return sb.toString();
+	    }
+	 public static TreeMap<String, Integer> getStatics(String session,String fechaIni, String fechaFin) throws ClientProtocolException, IOException{
 			
-			try {
-				Class.forName("com.mysql.jdbc.Driver");
-				Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sugarcrm", "root", "root");
-				Statement st = con.createStatement();
-				StringBuilder sql = new StringBuilder();
-				sql.append("select id from users");
-				ResultSet rs = st.executeQuery(sql.toString());
-				
-				while (rs.next())
-				{
-					
-					String id = (String) rs.getObject("id");
-					
-					Statement st2 = con.createStatement();
-					StringBuilder sql2 = new StringBuilder();
-					sql2.append("select count(*)");
-					sql2.append(" from marke_sale");
-					sql2.append(" where created_by='");
-					sql2.append(id);
-					sql2.append("'");
-					sql2.append(" and");
-					sql2.append(" date_entered>='");
-					sql2.append(fechaIni);
-					sql2.append("' and date_entered<='");
-					sql2.append(fechaFin);
-					sql2.append("'");
-					ResultSet rs2 = st2.executeQuery(sql2.toString());
-					while (rs2.next()){
-						 
-						Long count = (Long) rs2.getObject("count(*)");
-						clasificacion.put(id.split("_")[1], count);
-					}
-					rs2.close();
-					st2.close();
+		 String response = "";
+		 HashMap<String, Integer> clasificacion = new HashMap<String,Integer>();
+		 
+		 try {
+			response = getRecords(session,"Users","","",null,null,1);
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		 Gson mGson = new Gson();
+		 ResponseCompanyID responseCompanyID = new ResponseCompanyID();
+		 
+		 try{
+			 responseCompanyID = mGson.fromJson(response, ResponseCompanyID.class);
+		 }
+		 catch (JsonSyntaxException e) {
+		    	e.printStackTrace();
+		    }
+		 int cont = 0;
+		 for (Iterator<Contact> iterator = responseCompanyID.getEntry_list().iterator(); iterator.hasNext();) {
+			 Contact contact = iterator.next();
+			 String qry = "comercial = "+"'"+responseCompanyID.getEntry_list().get(cont).getId()+"'"+" and creado >="+"'"+fechaIni+"'"+" and creado <="+"'"+fechaFin+"'";
+			 cont++;
+			 try {
+					response = getRecords(session,"Marke_Sale",qry,"",null,null,1);
+				} catch (NoSuchAlgorithmException e) {
+					e.printStackTrace();
+				} catch (ClientProtocolException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
-				rs.close();
-				st.close();
-				
-			} catch (ClassNotFoundException e1) {
-				e1.printStackTrace();
-			}   catch (SQLException e) {
-				e.printStackTrace();
-			}
-			ValueComparator bvc =  new ValueComparator(clasificacion);
-	        TreeMap<String,Long> sorted_map = new TreeMap<String,Long>(bvc);
-	        sorted_map.putAll(clasificacion);
-	        return sorted_map;
+			 ResponseCompanyID respons = new ResponseCompanyID();
+			 
+			 try{
+				 respons = mGson.fromJson(response, ResponseCompanyID.class);
+			 }
+			 catch (JsonSyntaxException e) {
+			    	e.printStackTrace();
+			    }
+			 clasificacion.put(contact.getId().split("_")[1], Integer.parseInt(respons.getTotal_count()));
+		}
+		 	 
+		 //Ordenar el map
+		ValueComparator bvc = new ValueComparator(clasificacion);
+		TreeMap<String,Integer> sorted_map = new TreeMap<String,Integer>(bvc);
+		sorted_map.putAll(clasificacion);
+		return sorted_map;
 	 }
 	 
 	
