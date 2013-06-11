@@ -241,10 +241,11 @@ public class DatosCheckActivity extends Activity {
 
 				sugarComId = SugarConnection.getCompanyId(bu.getName(), id);
 				if (sugarComId.equals("")) {
-					sugarComId = SugarConnection.newCompany(id, bu.getName()
-							.toString(), null, bu.getAddress().toString(), bu
-							.getPhoneNumber(), bu.getEmail(), null, null, bu
-							.getTypes().toString());
+					sugarComId = SugarConnection
+							.newCompany(id, bu.getName(), null,
+									bu.getAddress(), bu.getPhoneNumber(), bu
+											.getEmail(), null, null, bu
+											.getTypes().toString());
 				}
 
 				Log.d("COMPANY_ID", sugarComId);

@@ -343,10 +343,6 @@ public class PlacesListActivity extends Activity {
 			// updating UI from Background Thread
 			runOnUiThread(new Runnable() {
 				public void run() {
-					/**
-					 * Updating parsed Places into LISTVIEW 683591264 618456527
-					 * 681456527 juantxu sodupe
-					 * */
 					if (!places.isEmpty()) {
 						// loop through each place
 						for (Business b : places) {
