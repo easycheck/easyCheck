@@ -550,9 +550,9 @@ public class SugarConnection {
 			atributo2.put("value", industry);
 			atributo3.put("name", "city");
 			atributo3.put("value", city);
-			atributo4.put("name", "adress");
+			atributo4.put("name", "address");  //solo tiene una d
 			atributo4.put("value", address);
-			atributo5.put("name", "phone_office");
+			atributo5.put("name", "phone");   // solo phone
 			atributo5.put("value", phone);
 			atributo6.put("name", "email");
 			atributo6.put("value", email);

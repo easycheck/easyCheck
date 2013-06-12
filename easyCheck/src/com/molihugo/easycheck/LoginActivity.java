@@ -15,7 +15,6 @@ import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -28,8 +27,7 @@ import com.molihugo.easycheck.utils.AlertDialogManager;
 import com.molihugo.easycheck.utils.ConnectionDetector;
 
 /**
- * Activity which displays a login screen to the user, offering registration as
- * well.
+ * Activity which displays a login screen to the user
  */
 public class LoginActivity extends Activity {
 
@@ -141,7 +139,6 @@ public class LoginActivity extends Activity {
 			estring = getString(R.string.error_field_required);
 			ssbuilder = new SpannableStringBuilder(estring);
 			ssbuilder.setSpan(fgcspan, 0, estring.length(), 0);
-
 			passwordView.setError(ssbuilder);
 			focusView = passwordView;
 			cancel = true;
@@ -149,7 +146,6 @@ public class LoginActivity extends Activity {
 			estring = getString(R.string.error_invalid_password);
 			ssbuilder = new SpannableStringBuilder(estring);
 			ssbuilder.setSpan(fgcspan, 0, estring.length(), 0);
-
 			passwordView.setError(ssbuilder);
 			focusView = passwordView;
 			cancel = true;
@@ -160,7 +156,6 @@ public class LoginActivity extends Activity {
 			estring = getString(R.string.error_field_required);
 			ssbuilder = new SpannableStringBuilder(estring);
 			ssbuilder.setSpan(fgcspan, 0, estring.length(), 0);
-
 			emailView.setError(ssbuilder);
 			focusView = emailView;
 			cancel = true;
@@ -169,7 +164,6 @@ public class LoginActivity extends Activity {
 			fgcspan = new ForegroundColorSpan(eColor);
 			ssbuilder = new SpannableStringBuilder(estring);
 			ssbuilder.setSpan(fgcspan, 0, estring.length(), 0);
-
 			emailView.setError(ssbuilder);
 			focusView = emailView;
 			cancel = true;
@@ -200,7 +194,6 @@ public class LoginActivity extends Activity {
 			 * Shows the progress dialog and hides the login form.
 			 */
 			pDialog = new ProgressDialog(LoginActivity.this);
-
 			pDialog.setMessage(Html
 					.fromHtml("<b>Login</b><br/>Esperando al CRM..."));
 			pDialog.setIndeterminate(false);
@@ -250,7 +243,6 @@ public class LoginActivity extends Activity {
 				estring = getString(R.string.error_incorrect_password);
 				ssbuilder = new SpannableStringBuilder(estring);
 				ssbuilder.setSpan(fgcspan, 0, estring.length(), 0);
-
 				passwordView.setError(ssbuilder);
 				passwordView.requestFocus();
 			}
