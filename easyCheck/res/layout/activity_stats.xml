@@ -26,7 +26,7 @@
         <TextView
             android1:layout_width="wrap_content"
             android1:layout_height="fill_parent"
-            android1:text="@string/title_activity_stats" />
+            android1:text="@string/title3_activity_stats" />
 
     </LinearLayout>
 
