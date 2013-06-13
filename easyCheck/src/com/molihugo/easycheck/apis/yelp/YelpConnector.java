@@ -55,12 +55,13 @@ public class YelpConnector {
 	 * @return JSON string response
 	 */
 	public static BusinessListBean search(String term, double lat,
-			double lon) {
+			double lon, String radius) {
 		String ll = String.valueOf(lat) + "," + String.valueOf(lon);
 		OAuthRequest request = new OAuthRequest(
 				Verb.GET,
 				"http://api.yelp.com/v2/search?ll="+ll);
 		 request.addQuerystringParameter("term", term);
+		 request.addQuerystringParameter("radius_filter", radius);
 		service.signRequest(accessToken, request);
 		Response response = request.send();
 

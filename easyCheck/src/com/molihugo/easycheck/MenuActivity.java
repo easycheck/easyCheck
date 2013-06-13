@@ -29,7 +29,6 @@ public class MenuActivity extends Activity {
 	// settings
 	private boolean apis[] = new boolean[3];
 	private String ratio = null;
-	private int color;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -54,7 +53,7 @@ public class MenuActivity extends Activity {
 				i.putExtra("google", apis[0]);
 				i.putExtra("foursquare", apis[1]);
 				i.putExtra("yelp", apis[2]);
-				i.putExtra("fondo", color);
+				i.putExtra("radio", ratio);
 				startActivity(i);
 			}
 		});
@@ -135,18 +134,10 @@ public class MenuActivity extends Activity {
 		apis[0] = sharedPrefs.getBoolean("Google", false);
 		apis[1] = sharedPrefs.getBoolean("Foursquare", false);
 		apis[2] = sharedPrefs.getBoolean("Yelp", false);
-		ratio = sharedPrefs.getString("Fondo", "negro");
+		ratio = sharedPrefs.getString("Radio", "1000");
 		Log.d("APIS-0", String.valueOf(apis[0]));
 		Log.d("APIS-1", String.valueOf(apis[1]));
 		Log.d("APIS-2", String.valueOf(apis[2]));
-
-		if (ratio.equalsIgnoreCase("azul")) {
-			color = Color.BLUE;
-		} else if (ratio.equalsIgnoreCase("blanco")) {
-			color = Color.WHITE;
-		} else if (ratio.equalsIgnoreCase("negro")) {
-			color = Color.BLACK;
-		}
 
 	}
 

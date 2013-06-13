@@ -556,9 +556,9 @@ public class SugarConnection {
 			atributo5.put("value", phone);
 			atributo6.put("name", "email");
 			atributo6.put("value", email);
-			atributo7.put("name", "phone_fax");
+			atributo7.put("name", "fax");   // solo fax
 			atributo7.put("value", fax);
-			atributo8.put("name", "website");
+			atributo8.put("name", "web");   // solo web
 			atributo8.put("value", web);
 			//Un objeto por cada record
 			objeto.add(atributo1);

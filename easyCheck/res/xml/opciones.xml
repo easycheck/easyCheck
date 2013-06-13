@@ -23,13 +23,13 @@
 
     <PreferenceCategory android:title="Opciones generales de búsqueda">
         
-        <ListPreference
-            android:key="Fondo"
+        <EditTextPreference
+            android:key="Radio"
             android:title="Radio de búsqueda"
-            android:summary="Selecciona el radio en metros para buscar negocios"
-            android:dialogTitle="Selecciona un radio"
-            android:entries="@array/Colores"
-            android:entryValues="@array/Colores"
+            android:summary="Selecciona un radio en metros para buscar negocios"
+            android:dialogTitle="Inserta el radio"
+            android:numeric="integer"
+    		android:maxLength="4"
             />
         
     </PreferenceCategory>

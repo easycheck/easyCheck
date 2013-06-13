@@ -86,7 +86,7 @@ public class PlacesListActivity extends Activity {
 		setContentView(R.layout.activity_main);
 
 		// get the variables passed by the previous activity.
-		ratio = getIntent().getExtras().getInt("fondo");
+		ratio = Integer.valueOf(getIntent().getExtras().getString("radio"));
 		apis[0] = getIntent().getExtras().getBoolean("google");
 		apis[1] = getIntent().getExtras().getBoolean("foursquare");
 		apis[2] = getIntent().getExtras().getBoolean("yelp");
@@ -217,7 +217,7 @@ public class PlacesListActivity extends Activity {
 
 				// Radius in meters - increase this value if you don't find any
 				// places
-				double radius = 1000; // 1000 meters
+				// double radius = 1000; // 1000 meters
 
 				Log.d("AAAAAAAAAAAAAAA", lat + "-lat & long-" + lon);
 
@@ -231,7 +231,7 @@ public class PlacesListActivity extends Activity {
 				// FROM GOOGLE PLACES
 				if (apis[0]) {
 					nearPlaces = GooglePlacesConnection.searchPlaces(lat, lon,
-							radius, null);
+							ratio, null);
 					Log.d("GOOOGLEEEEPLACEEESS", nearPlaces.getResults()
 							.toString()
 							+ "Total de negocios:"
@@ -313,7 +313,7 @@ public class PlacesListActivity extends Activity {
 				// FROM YELP
 				if (apis[2]) {
 					new YelpConnector();
-					BusinessListBean blb = YelpConnector.search("", lat, lon);
+					BusinessListBean blb = YelpConnector.search("", lat, lon, String.valueOf(ratio));
 					Log.d("YEEEEEEEEELP", blb.getBusinesses().toString()
 							+ "Total de negocios:" + blb.getTotal());
 
