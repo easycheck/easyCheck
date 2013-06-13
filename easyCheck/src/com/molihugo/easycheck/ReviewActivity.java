@@ -44,7 +44,7 @@ public class ReviewActivity extends Activity {
 		//HashMap<String,String> hm = new HashMap<String,String>();
 
 		// Getting listview
-		lv = (ListView) findViewById(R.id.listView1);
+		lv = (ListView) findViewById(R.id.listStats);
 		
 		SharedPreferences pref = getSharedPreferences(LoginActivity.PREFS_NAME,
 				MODE_PRIVATE);

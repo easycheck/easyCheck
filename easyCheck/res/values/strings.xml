@@ -11,7 +11,7 @@
     <string name="title_activity_single_place">Datos del Negocio</string>
     <string name="title_activity_places_map">Mapa de Negocios</string>
     <string name="title_activity_settings">Opciones</string>
-    <string name="title_activity_stats">Estadísticas</string>
+    <string name="title_activity_stats">Pos</string>
     <string name="title_activity_datos_check">Datos de la visita</string>
     <string name="label_visita">Nombre de la visita</string>
     <string name="label_contacto">Contacto en la empresa</string>
@@ -44,5 +44,7 @@
     <string name="txt_nombreVisita">Nombre de la visita</string>
     <string name="txt_Cantidad">Cantidad tratada</string>
     <string name="btn_nuevoContacto">Nuevo Contacto</string>
+    <string name="tittle2_stats_activity">Nombre</string>
+    <string name="title3_stats_activity">Nº Visitas</string>
 
 </resources>

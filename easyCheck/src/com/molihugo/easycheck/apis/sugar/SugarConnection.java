@@ -784,10 +784,17 @@ public class SugarConnection {
 		 int cont = 0;
 		 for (Iterator<Contact> iterator = responseCompanyID.getEntry_list().iterator(); iterator.hasNext();) {
 			 Contact contact = iterator.next();
-			 String qry = "comercial = "+"'"+responseCompanyID.getEntry_list().get(cont).getId()+"'"+" and creado >="+"'"+fechaIni+"'"+" and creado <="+"'"+fechaFin+"'";
+			 StringBuilder qry = new StringBuilder("comercial = "+"'"+responseCompanyID.getEntry_list().get(cont).getId()+"'");
+			 if (!fechaIni.equals("")){
+				 qry.append(" and creado >="+"'"+fechaIni+"'");
+			 }
+			 if (!fechaFin.equals("")){
+				 qry.append(" and creado <="+"'"+fechaFin+"'");
+			 } 
+			 
 			 cont++;
 			 try {
-					response = getRecords(session,"Marke_Sale",qry,"",null,null,1);
+					response = getRecords(session,"Marke_Sale",qry.toString(),"",null,null,1);
 				} catch (NoSuchAlgorithmException e) {
 					e.printStackTrace();
 				} catch (ClientProtocolException e) {
