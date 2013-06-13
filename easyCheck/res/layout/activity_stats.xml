@@ -14,18 +14,21 @@
          android:orientation="horizontal" >
 		
         <TextView
-            android1:layout_width="wrap_content"
-            android1:layout_height="fill_parent"
+            android1:layout_width="100dp"
+            android1:layout_height="wrap_content"
+            android1:layout_gravity="top|left"
             android1:text="@string/title_activity_stats" />
 
         <TextView
-            android1:layout_width="wrap_content"
+            android1:layout_width="100dp"
             android1:layout_height="fill_parent"
+            android1:layout_gravity="top|center"
             android1:text="@string/tittle2_stats_activity" />
 
         <TextView
             android1:layout_width="wrap_content"
             android1:layout_height="fill_parent"
+            android1:layout_gravity="top|right"
             android1:text="@string/title3_activity_stats" />
 
     </LinearLayout>

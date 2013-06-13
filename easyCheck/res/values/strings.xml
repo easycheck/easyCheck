@@ -46,6 +46,6 @@
     <string name="btn_nuevoContacto">Nuevo Contacto</string>
     <string name="tittle2_stats_activity">Nombre</string>
     <string name="title3_stats_activity">Nº Visitas</string>
-    <string name="title3_activity_stats">Numero Vistas</string>
+    <string name="title3_activity_stats">Numero Visitas</string>
 
 </resources>

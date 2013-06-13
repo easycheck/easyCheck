@@ -6,20 +6,23 @@
 
     <TextView
         android:id="@+id/pos"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
+        android:layout_gravity="top|left"
         android:text="TextView" />
 
     <TextView
         android:id="@+id/nameStats"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
+        android:layout_gravity="top|center"
         android:text="TextView" />
 
     <TextView
         android:id="@+id/numSales"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="top|right"
         android:text="TextView" />
 
 </LinearLayout>
