@@ -47,5 +47,6 @@
     <string name="tittle2_stats_activity">Nombre</string>
     <string name="title3_stats_activity">Nº Visitas</string>
     <string name="title3_activity_stats">Numero Visitas</string>
+    <string name="btn_activity_review">Buscar visitas por fechas</string>
 
 </resources>
