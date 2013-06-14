@@ -1,12 +1,8 @@
 package com.molihugo.easycheck.utils;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.TreeMap;
 
 import com.example.easycheck.R;
-
-
 
 import android.content.Context;
 import android.view.LayoutInflater;
