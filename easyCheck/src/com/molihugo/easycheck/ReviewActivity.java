@@ -22,6 +22,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -49,7 +50,7 @@ public class ReviewActivity extends FragmentActivity {
 	private Button btn1;
 	private String fechaIni;
 
-	private String fechaFin = null;
+	private String fechaFin = "";
 
 	CheckDAO ranking;
 	// rankingItems data
@@ -140,6 +141,7 @@ public class ReviewActivity extends FragmentActivity {
 
 	}
 
+	@SuppressLint("ValidFragment")
 	public class DatePickerFragment extends DialogFragment implements
 			DatePickerDialog.OnDateSetListener {
 
@@ -207,12 +209,12 @@ public class ReviewActivity extends FragmentActivity {
 		 * */
 		protected String doInBackground(String... args) {
 
-			while (fechaFin == null) {
-
+			
+			if (!fechaFin.equals("")){
+				listSugar = SugarConnection.getRevision(id, fechaIni, fechaFin,
+						Utils.convertId(username), 1);
 			}
-
-			listSugar = SugarConnection.getRevision(id, fechaIni, fechaFin,
-					Utils.convertId(username), null);
+			
 
 			return null;
 		}

@@ -26,8 +26,16 @@ public class Utils {
 	}
 
 	public static String getStringFromDate(int year, int month, int day) {
-
-		return String.valueOf(year) + "-" + String.valueOf(month) + "-"
-				+ String.valueOf(day);
+		String date = String.valueOf(year)+ "-";
+		if(month<10)
+			date = date + "0"+String.valueOf(month) + "-";
+		else
+			date = date +String.valueOf(month) + "-";
+		
+		if (day < 10)
+			date = date + "0"+String.valueOf(month);
+		else
+			date = date +String.valueOf(month);
+		return date;
 	}
 }
