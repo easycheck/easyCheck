@@ -211,6 +211,10 @@ public class ReviewActivity extends FragmentActivity {
 
 			
 			if (!fechaFin.equals("")){
+				Log.d("review",id );
+				Log.d("review",fechaIni);
+				Log.d("review",fechaFin );
+				Log.d("review", username);
 				listSugar = SugarConnection.getRevision(id, fechaIni, fechaFin,
 						Utils.convertId(username), 1);
 			}
